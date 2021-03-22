@@ -157,6 +157,7 @@ public:
     bool ReadDeterministicMint(const uint256& hashPubcoin, CDeterministicMint& dMint);
     bool EraseDeterministicMint(const uint256& hashPubcoin);
     bool WriteZerocoinMint(const CZerocoinMint& zerocoinMint);
+    bool UpdateZerocoinMintDenom(const uint256& hashPubcoin, int64_t denom);
 
     bool EraseZerocoinMint(const CZerocoinMint& zerocoinMint);
     bool ReadZerocoinMint(const CBigNum &bnPubcoinValue, CZerocoinMint& zerocoinMint);

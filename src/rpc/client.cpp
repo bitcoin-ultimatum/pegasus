@@ -168,6 +168,8 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getserials", 1},
         {"getserials", 2},
         {"getfeeinfo", 0},
+        {"updatezcdenom", 0},
+        {"getfeeinfo", 0},
         {"createcontract", 1},
         {"createcontract", 2},
         {"createcontract", 4},

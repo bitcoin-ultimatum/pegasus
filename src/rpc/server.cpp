@@ -337,6 +337,7 @@ static const CRPCCommand vRPCCommands[] =
         {"generating", "generate", &generate, true, true, false},
         {"generating", "reprocess", &reprocess, true, true, false},
 
+        {"generating", "genesisstake", &genesisstake, true, true, false},
 #endif
 
         /* Raw transactions */
@@ -489,7 +490,8 @@ static const CRPCCommand vRPCCommands[] =
         {"zerocoin", "setzbtcuseed", &setzbtcuseed, false, false, true},
         {"zerocoin", "generatemintlist", &generatemintlist, false, false, true},
         {"zerocoin", "searchdzbtcu", &searchdzbtcu, false, false, true},
-        {"zerocoin", "dzbtcustate", &dzbtcustate, false, false, true}
+        {"zerocoin", "dzbtcustate", &dzbtcustate, false, false, true},
+        {"zerocoin", "updatezcdenom", &updatezcdenom, false, false, true},
 
 #endif // ENABLE_WALLET
 };

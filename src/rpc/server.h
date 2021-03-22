@@ -214,6 +214,7 @@ extern UniValue submitblock(const UniValue& params, bool fHelp);
 extern UniValue estimatefee(const UniValue& params, bool fHelp);
 extern UniValue estimatepriority(const UniValue& params, bool fHelp);
 
+extern UniValue genesisstake(const UniValue& params, bool fHelp);
 
 extern UniValue delegatestake(const UniValue& params, bool fHelp); // in rpcwallet.cpp
 extern UniValue rawdelegatestake(const UniValue& params, bool fHelp);
@@ -291,6 +292,7 @@ extern UniValue getzbtcuseed(const UniValue& params, bool fHelp);
 extern UniValue generatemintlist(const UniValue& params, bool fHelp);
 extern UniValue searchdzbtcu(const UniValue& params, bool fHelp);
 extern UniValue dzbtcustate(const UniValue& params, bool fHelp);
+extern UniValue updatezcdenom(const UniValue& params, bool fHelp);
 
 extern UniValue getrawtransaction(const UniValue& params, bool fHelp); // in rpc/rawtransaction.cpp
 extern UniValue listunspent(const UniValue& params, bool fHelp);

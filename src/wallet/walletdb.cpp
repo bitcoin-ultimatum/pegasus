@@ -1174,6 +1174,16 @@ bool CWalletDB::WriteZerocoinMint(const CZerocoinMint& zerocoinMint)
     return Write(std::make_pair(std::string("zerocoin"), hash), zerocoinMint, true);
 }
 
+bool CWalletDB::UpdateZerocoinMintDenom(const uint256& hashPubcoin, int64_t denom)
+{
+   CDeterministicMint dMint;
+   if (!ReadDeterministicMint(hashPubcoin, dMint))
+      return false;
+
+   dMint.SetDenomination(libzerocoin::IntToZerocoinDenomination(denom));
+   return WriteDeterministicMint(dMint);
+}
+
 bool CWalletDB::ReadZerocoinMint(const CBigNum &bnPubCoinValue, CZerocoinMint& zerocoinMint)
 {
     CDataStream ss(SER_GETHASH, 0);

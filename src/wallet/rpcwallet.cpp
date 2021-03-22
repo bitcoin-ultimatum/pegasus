@@ -4604,6 +4604,48 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
     return DoZbtcuSpend(nAmount, vMintsSelected, address_str);
 }
 
+UniValue updatezcdenom(const UniValue& params, bool fHelp)
+{
+   if(fHelp || params.size() != 2)
+      throw std::runtime_error(
+      "updatezcdenom\n"
+      "\nUpdate txid for zerocoin mint\n" +
+      HelpRequiringPassphrase() + "\n"
+                                  "\nArguments:\n"
+                                  "1.    \"amount (denomination)\": \"xxx\",           (numeric, required) Denomination: 1, 5, 10, 50, 100, 500, 1000, 5000.\n"
+                                  "2.   \"pubcoin\": \"xxx\"          (string, required) Pubcoin in hex format for target mint.\n"
+                                  "\nResult\n"
+                                  "\"success\" : b,  (boolean) Whether the seed was successfully set.\n"
+
+                                  "\nExamples:\n" +
+                                  HelpExampleCli("updatezcdenom", "500 \"d8ae3a50401ad03933d9a69bfcf6e28da5e71ae0a006d2f21dddea6da980893a\"") +
+                                  HelpExampleRpc("updatezcdenom", "500 \"d8ae3a50401ad03933d9a69bfcf6e28da5e71ae0a006d2f21dddea6da980893a\""));
+
+   LOCK2(cs_main, pwalletMain->cs_wallet);
+
+   EnsureWalletIsUnlocked();
+
+   uint256 hashpubcoin;
+   int denom = libzerocoin::IntToZerocoinDenomination(params[0].get_int());
+   hashpubcoin.SetHex(params[1].get_str());
+
+
+   if(denom != 1 && denom != 5 && denom != 10 && denom != 50 && denom != 100 && denom != 500 && denom != 1000 && denom != 5000)
+      throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, amount denomination. Should be denomination: 1, 5, 10, 50, 100, 500, 1000, 5000");
+
+   CWalletDB walletdb(pwalletMain->strWalletFile);
+   bool fSuccess = walletdb.UpdateZerocoinMintDenom(hashpubcoin, denom);
+
+
+   UniValue ret(UniValue::VOBJ);
+   if(fSuccess)
+      ret.push_back(Pair("success", fSuccess));
+   else
+      ret.push_back(Pair("fail", fSuccess));
+
+   return ret;
+}
+
 UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)

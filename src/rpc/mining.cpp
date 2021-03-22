@@ -116,6 +116,91 @@ UniValue getgenerate(const UniValue& params, bool fHelp)
     return GetBoolArg("-gen", false);
 }
 
+UniValue genesisstake(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 3)
+        throw std::runtime_error(
+            "genesisstake balance btcuprivkey amount\n"
+            "\nCreate transaction in genesis"
+
+            "\nArguments:\n"
+            "1. balance          (numeric, required) Stake balance in genesis.\n"
+            "2. \"btcuprivkey\"    (string, required) Private key\n"
+            "3. count            (numeric, required) Number of generated transaction\n"
+
+            "\nResult\n"
+            "[ trxhashes ]     (array) hashes of generated coins\n"
+
+            "\nExamples:\n"
+            "\nStake 40000.00 BTCU in genesis\n"
+            + HelpExampleCli("genesisstake", "40000")
+        );
+
+//    //Only for tests
+//    UniValue params_(UniValue::VType::VARR);
+//    params_.push_back("L1nBvfDf3mucBPyFXuyhENiEu7B4mjDDYz6LhQRKhKMWzfHx7nfk");
+//    importprivkey(params_, false).get_str();
+
+    UniValue trxHashes(UniValue::VARR);
+
+    const int nValue = std::stoi(params[0].get_str());
+    const std::string strSecret = params[1].get_str();
+    const int nCount = std::stoi(params[2].get_str());
+
+    CBTCUSecret vchSecret;
+    if (!vchSecret.SetString(strSecret))
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key encoding");
+
+    CKey keyPriv = vchSecret.GetKey();
+    if (!keyPriv.IsValid())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Private key outside allowed range");
+
+    CPubKey keyPub = keyPriv.GetPubKey();
+    CKeyID vchAddress = keyPub.GetID();
+
+    {
+        LOCK2(cs_main, pwalletMain->cs_wallet);
+        EnsureWalletIsUnlocked();
+
+        pwalletMain->MarkDirty();
+        pwalletMain->SetAddressBook(vchAddress, "genesis", AddressBook::AddressBookPurpose::RECEIVE);
+        pwalletMain->HaveKey(vchAddress);
+        pwalletMain->mapKeyMetadata[vchAddress].nCreateTime = 1;
+        pwalletMain->AddKeyPubKey(keyPriv, keyPub);
+        pwalletMain->nTimeFirstKey = 1;
+
+    }
+
+    CCoinsMap coinsMap;
+    auto merkleClb = [&](CMerkleTx& wtx){
+        wtx.hashBlock = Params().HashGenesisBlock();
+        wtx.nIndex = rand();
+    };
+
+    for (int i = 0; i < nCount; ++i) {
+        CCoinsCacheEntry coinsEntry;
+
+        coinsEntry.flags = CCoinsCacheEntry::DIRTY | CCoinsCacheEntry::FRESH;
+        coinsEntry.coins.nVersion = CTransaction::BITCOIN_VERSION;
+        coinsEntry.coins.vout.push_back(CTxOut(nValue * COIN, GetScriptForDestination(vchAddress)));
+
+        CMutableTransaction trx;
+        trx.nVersion = coinsEntry.coins.nVersion;
+        trx.vout = coinsEntry.coins.vout;
+        trx.nLockTime = rand();
+
+        auto trxHash = trx.GetHash();
+
+        coinsMap.insert(std::make_pair(trxHash, coinsEntry));
+        pwalletMain->AddToWalletIfInvolvingMe(CTransaction(trxHash, coinsEntry.coins), nullptr, merkleClb, false);
+        trxHashes.push_back(HexStr(trxHash));
+    }
+
+    pcoinsTip->BatchWrite(coinsMap, 0);
+
+    return trxHashes;
+}
+
 UniValue generate(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 1)
