@@ -336,3 +336,8 @@ void RegisterValidator::onRegister()
     Q_EMIT registered(mn.name, mn.address, mn.hash);
     this->close();
 }
+
+void RegisterValidator::changeTheme(bool isLightTheme, QString &theme)
+{
+    btnBox->setIcon(getIconComboBox(isLightTheme, widgetBox->isVisible()));
+}

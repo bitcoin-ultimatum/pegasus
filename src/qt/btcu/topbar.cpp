@@ -169,6 +169,8 @@ void TopBar::onThemeClicked(){
     }
     updateStyle(ui->pushButtonTheme);
 
+    btnOwnerTocen->setIcon(getIconComboBox(lightTheme, menuTocen!=nullptr));
+
     Q_EMIT themeChanged(lightTheme);
 }
 
@@ -643,7 +645,7 @@ void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBa
 
     //ui->labelImmaturezPiv->setText(QString::number(leasingReward/100000000.0, 'g', 12) + " zBTCU");//GUIUtil::formatBalance(immatureZerocoinBalance, nDisplayUnit, true));
     ui->labelLeasing->setText(QString::number(leasing/100000000.0) + " zBTCU");
-    ui->labelImmaturezPiv->setText(QString::number(leasingReward/100000000.0, 'g', 5) + " zBTCU");
+    ui->labelImmaturezPiv->setText(QString::number(leasingReward/100000000.0, 'g', 5) + " BTCU");
     //ui->labelLeasing->setText(GUIUtil::formatBalance(/*leasingModel->getTotalAmount()*/ leasing, nDisplayUnit, true));
 
     ui->labelPendingPiv->setText(GUIUtil::formatBalance(unconfirmedBalance, nDisplayUnit));

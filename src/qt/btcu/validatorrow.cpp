@@ -1,5 +1,6 @@
 #include "validatorrow.h"
 #include "ui_validatorrow.h"
+#include "qt/btcu/qtutils.h"
 #include <iostream>
 
 ValidatorRow::ValidatorRow(QWidget *parent) :
@@ -7,6 +8,12 @@ ValidatorRow::ValidatorRow(QWidget *parent) :
     ui(new Ui::ValidatorRow)
 {
     ui->setupUi(this);
+
+    setCssProperty(ui->Contener, "container-border");
+
+    setCssSubtitleScreen(ui->labelName);
+    ui->labelPublicKey->setProperty("cssClass","text-list-amount-send");
+    setCssSubtitleScreen(ui->labelVIN);
 
     connect(ui->checkBoxVote, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged()));
 }

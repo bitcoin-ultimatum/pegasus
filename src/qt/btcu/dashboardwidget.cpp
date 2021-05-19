@@ -393,6 +393,9 @@ void DashboardWidget::walletSynced(bool sync){
 
 void DashboardWidget::changeTheme(bool isLightTheme, QString& theme){
     static_cast<TxViewHolder*>(this->txViewDelegate->getRowFactory())->isLightTheme = isLightTheme;
+
+    btnBoxSortType->setIcon(getIconComboBox(isLightTheme, widgetBoxSortType->isVisible()));
+    btnBoxSort->setIcon(getIconComboBox(isLightTheme, widgetBoxSort->isVisible()));
 #ifdef USE_QTCHARTS
     if (chart) this->changeChartColors();
 #endif

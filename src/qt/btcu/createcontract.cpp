@@ -45,6 +45,14 @@ CreateContract::CreateContract(BTCUGUI *parent) :
     connect(btnUpAddressContact, &QAction::triggered, [this](){ onLineEditClicked(); });
     ui->lineEditSenderAddress->removeAction(btnUpAddressContact);
 
+    menuContacts = new ContactsDropdown(0, 0, this);
+    menuContacts->setGraphicsEffect(0);
+    connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label){
+        ui->lineEditSenderAddress->setText(address);
+        this->address = address;
+    });
+    menuContacts->hide();
+
     ui->lineEditGasLimit->setProperty("cssClass", "edit-primary-multi-book");
     ui->lineEditGasLimit->setValidator(new QRegExpValidator(QRegExp("[0-9]+"), ui->lineEditGasLimit));
     ui->lineEditGasLimit->setPlaceholderText(tr("Enter gas limit"));
@@ -144,7 +152,15 @@ void CreateContract::onGasPrice()
     }
 }
 
-void CreateContract::onLineEditClicked() {
+void CreateContract::onLineEditClicked()
+{
+    if(menuContacts->isVisible())
+    {
+        menuContacts->hide();
+        btnAddressContact->setIcon(getIconComboBox(isLightTheme(), false));
+        return;
+    }
+
     int contactsSize = walletModel->getAddressTableModel()->sizeRecv();
     if(contactsSize == 0) {
         inform(tr( "No receive addresses available, you can go to the receive screen and create some there!"));
@@ -155,34 +171,9 @@ void CreateContract::onLineEditClicked() {
     height = (contactsSize < 4) ? height * contactsSize + 25 : height * 4 + 25;
     int width = ui->lineEditSenderAddress->width();
 
-    if(!menuContacts){
-        menuContacts = new ContactsDropdown(
-                width,
-                height,
-                this
-        );
-        menuContacts->setGraphicsEffect(0);
-        connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label){
-            ui->lineEditSenderAddress->setText(address);
-            this->address = address;
+    menuContacts->setFixedSize(width, height);
 
-            ui->lineEditSenderAddress->removeAction(btnUpAddressContact);
-            ui->lineEditSenderAddress->addAction(btnAddressContact, QLineEdit::TrailingPosition);
-        });
-    }
-
-    if(menuContacts->isVisible())
-    {
-        menuContacts->hide();
-        ui->lineEditSenderAddress->removeAction(btnUpAddressContact);
-        ui->lineEditSenderAddress->addAction(btnAddressContact, QLineEdit::TrailingPosition);
-        return;
-    }
-    else
-    {
-        ui->lineEditSenderAddress->removeAction(btnAddressContact);
-        ui->lineEditSenderAddress->addAction(btnUpAddressContact, QLineEdit::TrailingPosition);
-    }
+    btnAddressContact->setIcon(getIconComboBox(isLightTheme(), true));
 
     menuContacts->setWalletModel(walletModel, AddressTableModel::Receive);
     menuContacts->resizeList(width, height);
@@ -486,4 +477,9 @@ bool CreateContract::GetSenderDest(CWallet * const pwallet, const CTransaction& 
 
     // Extract destination from script
     return ExtractDestination(senderPubKey, txSenderDest);
+}
+
+void CreateContract::changeTheme(bool isLightTheme, QString &theme)
+{
+    btnAddressContact->setIcon(getIconComboBox(isLightTheme ,menuContacts->isVisible()));
 }

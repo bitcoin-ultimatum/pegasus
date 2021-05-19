@@ -115,6 +115,15 @@ LeasingWidget::LeasingWidget(BTCUGUI* parent) :
    btnUpOwnerContact = ui->lineEditOwnerAddress->addAction(getIconComboBox(isLightTheme(),true), QLineEdit::TrailingPosition);
    connect(btnUpOwnerContact, &QAction::triggered, [this](){ onOwnerClicked(); });
 
+    menuOwner = new ContactsDropdown(0, 0, this);
+    menuOwner->setGraphicsEffect(0);
+    connect(menuOwner, &ContactsDropdown::contactSelected, [this](QString address, QString label) {
+        ui->lineEditOwnerAddress->setText(address);
+        curentAddress = address;
+        curentName = label;
+    });
+    menuOwner->hide();
+
    ui->lineEditOwnerAddress->removeAction(btnUpOwnerContact);
 
    /* Button*/
@@ -172,7 +181,7 @@ LeasingWidget::LeasingWidget(BTCUGUI* parent) :
     connect(ui->comboBoxSortType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onSortTypeChanged(const QString&)));
     ui->comboBoxSortType->setVisible(false);
     ui->lineEditSort->setText(ui->comboBoxSortType->currentText());
-    widgetBoxSortType=new QWidget(this);
+    widgetBoxSortType = new QWidget(this);
     QVBoxLayout* LayoutDigits = new QVBoxLayout(widgetBoxSortType);
     listViewBoxSortType = new QListView();
     LayoutDigits->addWidget(listViewBoxSortType);
@@ -186,6 +195,15 @@ LeasingWidget::LeasingWidget(BTCUGUI* parent) :
     sendMultiRow = new SendMultiRow(this);
     sendMultiRow->setOnlyLeasingAddressAccepted(true);
     ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
+
+    menuContacts = new ContactsDropdown(0, 0,this);
+    menuContacts->setGraphicsEffect(0);
+    connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label) {
+        sendMultiRow->setLabel(label);
+        sendMultiRow->setAddress(address);
+    });
+    menuContacts->hide();
+
     connect(sendMultiRow, &SendMultiRow::onContactsClicked, [this](){ onContactsClicked(); });
 }
 
@@ -637,8 +655,10 @@ void LeasingWidget::onError(QString error, int type) {
 
 void LeasingWidget::onOwnerClicked()
 {
-    if(menu && menu->isVisible()){
-        menu->hide();
+    if(menuOwner->isVisible()){
+        menuOwner->hide();
+        btnOwnerContact->setIcon(getIconComboBox(isLightTheme(), false));
+        return;
     }
 
     int contactsSize = walletModel->getAddressTableModel()->sizeRecv();
@@ -651,31 +671,9 @@ void LeasingWidget::onOwnerClicked()
     height = (contactsSize < 3) ? height * contactsSize + 25 : height * 3 + 25;
     int width = width = ui->lineEditOwnerAddress->width();
 
-    if (!menuOwner) {
-        menuOwner = new ContactsDropdown(
-                width,
-                height,
-                this
-        );
-        menuOwner->setGraphicsEffect(0);
-        connect(menuOwner, &ContactsDropdown::contactSelected, [this](QString address, QString label) {
-            ui->lineEditOwnerAddress->setText(address);
-            curentAddress = address;
-            curentName = label;
-        });
-    }
+    menuOwner->setFixedSize(width, height);
 
-    if(menuOwner->isVisible()){
-        menuOwner->hide();
-        ui->lineEditOwnerAddress->removeAction(btnUpOwnerContact);
-        ui->lineEditOwnerAddress->addAction(btnOwnerContact, QLineEdit::TrailingPosition);
-        return;
-    }
-    else
-    {
-        ui->lineEditOwnerAddress->removeAction(btnOwnerContact);
-        ui->lineEditOwnerAddress->addAction(btnUpOwnerContact, QLineEdit::TrailingPosition);
-    }
+    btnOwnerContact->setIcon(getIconComboBox(isLightTheme(), true));
 
     menuOwner->setWalletModel(walletModel, AddressTableModel::Receive);
     menuOwner->resizeList(width, height);
@@ -694,8 +692,11 @@ void LeasingWidget::onOwnerClicked()
 
 void LeasingWidget::onContactsClicked()
 {
-    if(menu && menu->isVisible()){
-        menu->hide();
+    if(menuContacts->isVisible())
+    {
+        menuContacts->hide();
+        sendMultiRow->updateAction();
+        return;
     }
 
     int contactsSize = walletModel->getAddressTableModel()->sizeSend();
@@ -708,27 +709,9 @@ void LeasingWidget::onContactsClicked()
     height = (contactsSize < 3) ? height * contactsSize + 25 : height * 3 + 25;
     int width = width = sendMultiRow->getEditWidth();
 
-    if (!menuContacts) {
-        menuContacts = new ContactsDropdown(
-                width,
-                height,
-                this
-        );
-        menuContacts->setGraphicsEffect(0);
-        connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label) {
-            sendMultiRow->setLabel(label);
-            sendMultiRow->setAddress(address);
-        });
-    }
+    menuContacts->setFixedSize(width, height);
 
-    if(menuContacts->isVisible())
-    {
-        menuContacts->hide();
-        sendMultiRow->updateAction();
-        return;
-    }
-
-   menuContacts->setWalletModel(walletModel, AddressTableModel::Send);
+    menuContacts->setWalletModel(walletModel, AddressTableModel::Send);
     menuContacts->resizeList(width, height);
     menuContacts->setStyleSheet(styleSheet());
     menuContacts->adjustSize();
@@ -1182,6 +1165,14 @@ void LeasingWidget::onMyLeasingAddressesClicked()
 
 void LeasingWidget::changeTheme(bool isLightTheme, QString& theme)
 {
+    static_cast<TxViewHolder*>(this->txViewDelegate->getRowFactory())->isLightTheme = isLightTheme;
+
+    btnBoxSortType->setIcon(getIconComboBox(isLightTheme,widgetBoxSortType->isVisible()));
+
+    btnOwnerContact->setIcon(getIconComboBox(isLightTheme,menuOwner->isVisible()));
+
+    //if(menu && menu->isVisible()){
+    //}
     /*static_cast<LeasingHolder*>(leasing->getRowFactory())->isLightTheme = isLightTheme;
     static_cast<AddressHolder*>(addressLeasing->getRowFactory())->isLightTheme = isLightTheme;
     //ui->listView->update();*/

@@ -40,6 +40,7 @@ public:
     void setTableModel(WalletModel* walletModel);
 
 private Q_SLOTS:
+    void changeTheme(bool isLightTheme, QString& theme) override;
     void onLineEditClicked(bool ownerAdd);
     void onComboBox(const QModelIndex &index);
     void onBoxClicked();

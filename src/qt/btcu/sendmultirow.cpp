@@ -68,6 +68,7 @@ SendMultiRow::SendMultiRow(PWidget *parent) :
     connect(ui->lineEditAddress, SIGNAL(textChanged(const QString&)), this, SLOT(addressChanged(const QString&)));
     connect(btnContact, &QAction::triggered, [this](){
        btnContact->setIcon(getIconComboBox(isLightTheme(),true));
+       isShown = true;
        /*ui->lineEditAddress->removeAction(btnContact);
        ui->lineEditAddress->addAction(btnUpContact, QLineEdit::TrailingPosition);*/
        Q_EMIT onContactsClicked(this);});
@@ -248,6 +249,7 @@ void SendMultiRow::setAddress(const QString& address) {
 void SendMultiRow::updateAction()
 {
    btnContact->setIcon(getIconComboBox(isLightTheme(),false));
+   isShown = false;
 }
 
 void SendMultiRow::setAmount(const QString& amount){
@@ -318,6 +320,11 @@ void SendMultiRow::leaveEvent(QEvent *) {
 
 int SendMultiRow::getMenuBtnWidth(){
     return ui->btnMenu->width();
+}
+
+void SendMultiRow::changeTheme(bool isLightTheme, QString& theme)
+{
+    btnContact->setIcon(getIconComboBox(isLightTheme,isShown));
 }
 
 SendMultiRow::~SendMultiRow(){

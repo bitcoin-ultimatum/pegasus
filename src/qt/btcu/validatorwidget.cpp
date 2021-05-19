@@ -257,7 +257,7 @@ void ValidatorWidget::showRowsOfValidators(bool isVote)
 }
 
 void ValidatorWidget::savingNewValidator(std::string pubKey, CTxIn vin, bool isVote) {
-    std::cout << pubKey << " " << vin.ToString() << std::endl << std::endl;
+    //std::cout << pubKey << " " << vin.ToString() << std::endl << std::endl;
 
     registeredValidators.push_back({"", pubKey, vin, false});
 
@@ -359,7 +359,7 @@ void ValidatorWidget::savingActiveValidator(std::string pubKey, CTxIn vin)
 
 void ValidatorWidget::onVoted(QString pubKey, bool vote)
 {
-    std::cout << pubKey.toStdString() << " " << vote << std::endl;
+    //std::cout << pubKey.toStdString() << " " << vote << std::endl;
 
     for(int i = 0; i < registeredValidators.size(); ++i)
         if(registeredValidators[i].pubKey == pubKey.toStdString()) {
@@ -480,7 +480,7 @@ boost::optional<CKey> ValidatorWidget::getCollateralKey(CMasternode *pmn)
 
 void ValidatorWidget::onRegisterValidator(std::string MNName, std::string address, std::string hash)
 {
-    std::cout << MNName << " " << address << std::endl << std::endl;
+    //std::cout << MNName << " " << address << std::endl << std::endl;
 
     DefaultDialog *Defdialog = new DefaultDialog(window);
     std::string name = MNName + " validator?";
@@ -521,7 +521,7 @@ void ValidatorWidget::onRegisterValidator(std::string MNName, std::string addres
         informError(tr(error.toStdString().c_str()));
         return;
     }*/
-    std::cout << ret << std::endl;
+    //std::cout << ret << std::endl;
 }
 boost::optional<CValidatorRegister> ValidatorWidget::createValidatorReg(const std::string &mnName, const std::string &mnHash, const std::string &mnAddress)
 {
@@ -544,7 +544,7 @@ boost::optional<CValidatorRegister> ValidatorWidget::createValidatorReg(const st
 boost::optional<std::pair<CTxIn, CKey>> ValidatorWidget::getVinKey(const std::string &mnName, const std::string &mnHash, const std::string &mnAddress)
 {
     boost::optional<std::pair<CTxIn, CKey>> vinKeyOpt;
-    std::cout << "hash: " << mnHash << std::endl << std::endl;
+    //std::cout << "hash: " << mnHash << std::endl << std::endl;
     uint256 uHash =  uint256(mnHash);
     uint256 uBlock;
     CTransaction tr;

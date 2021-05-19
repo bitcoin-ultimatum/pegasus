@@ -25,6 +25,7 @@ private:
     bool GetSenderDest(CWallet * const pwallet, const CTransaction& tx, CTxDestination& txSenderDest);
 
 private Q_SLOTS:
+    void changeTheme(bool isLightTheme, QString &theme) override;
     void onLineEditClicked();
     void onClearAll();
     void onCreateContract();

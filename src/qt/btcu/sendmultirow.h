@@ -59,6 +59,7 @@ public:
     int getMenuBtnWidth();
 
 public Q_SLOTS:
+    void changeTheme(bool isLightTheme, QString& theme) override;
     void clear();
     void updateDisplayUnit();
 
@@ -92,6 +93,7 @@ private:
     bool isExpanded = false;
     bool onlyStakingAddressAccepted = false;
     bool onlyLeasingAddressAccepted = false;
+    bool isShown = false;
 
     SendCoinsRecipient recipient;
 
