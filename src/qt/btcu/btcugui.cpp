@@ -754,6 +754,17 @@ void BTCUGUI::showProgress(const QString& title, int nProgress)
     } else if (pProgressDialog) {
         if(pProgressDialog->value()!= nProgress)
         {
+            QString labelText = title;
+#ifdef Q_OS_MAC
+            labelText = title + " [" + QString::number(nProgress) + "%]";
+#endif
+#ifdef Q_OS_LINUX
+            labelText = title + "...";
+#endif
+#ifdef Q_OS_WIN
+            labelText = title + "...";
+#endif
+            pProgressDialog->setLabelText(labelText);
             pProgressDialog->setValue(nProgress);
         }
     }
