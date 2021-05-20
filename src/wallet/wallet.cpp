@@ -2103,8 +2103,9 @@ bool CWallet::GetMaxP2LCoins(CPubKey& pubKeyRet, CKey& keyRet, CAmount& amount) 
     return (amount > 0);
 }
 
-void CWallet::GetAvailableLeasingRewards(std::vector<COutput>& vCoins) const {
+CAmount CWallet::GetAvailableLeasingRewards(std::vector<COutput>& vCoins) const {
     vCoins.clear();
+    CAmount amount = 0;
     {
         LOCK2(cs_main, cs_wallet);
         for (const auto& it : mapWallet) {
@@ -2125,13 +2126,17 @@ void CWallet::GetAvailableLeasingRewards(std::vector<COutput>& vCoins) const {
 
                 if (utxo.scriptPubKey.IsLeasingReward()) {
                     isminetype mine = IsMine(utxo);
-                    if (mine & ISMINE_SPENDABLE)
+                    if (mine & ISMINE_SPENDABLE) {
+                        COutput output = COutput(pcoin, i, 0, false);
                         // Depth is not used, no need waste resources and set it for now.
-                        vCoins.emplace_back(COutput(pcoin, i, 0, false));
+                        vCoins.emplace_back(output);
+                        amount += output.Value();
+                    }
                 }
             }
         }
     }
+    return amount;
 }
 
 /**

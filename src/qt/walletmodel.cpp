@@ -42,7 +42,7 @@ WalletModel::WalletModel(CWallet* wallet, OptionsModel* optionsModel, QObject* p
                                                                                          cachedBalance(0), cachedUnconfirmedBalance(0), cachedImmatureBalance(0),
                                                                                          cachedZerocoinBalance(0), cachedUnconfirmedZerocoinBalance(0), cachedImmatureZerocoinBalance(0),
                                                                                          cachedEncryptionStatus(Unencrypted),
-                                                                                         cachedNumBlocks(0)
+                                                                                         cachedNumBlocks(0), cachedInLeasingBalance(0), cachedLeasingProfitBalance(0)
 {
     fHaveWatchOnly = wallet->HaveWatchOnly();
     fHaveMultiSig = wallet->HaveMultiSig();
@@ -198,31 +198,8 @@ CAmount WalletModel::getInLeasing()
 
 CAmount WalletModel::getLeasingProfit()
 {
-    AddressTableModel* addressTableModel = this->getAddressTableModel();
-    AddressFilterProxyModel *filter = new AddressFilterProxyModel(QString(AddressTableModel::Receive), this);
-    filter->setSourceModel(addressTableModel);
-
-    std::string address = "";
-    CAmount amount = 0;
-    int rowCount = filter->rowCount();
-    for(int addressNumber = 0; addressNumber < rowCount; addressNumber++)
-    {
-        QModelIndex rowIndex = filter->index(addressNumber, AddressTableModel::Address);
-        QModelIndex sibling = rowIndex.sibling(addressNumber, AddressTableModel::Label);
-        QString label = sibling.data(Qt::DisplayRole).toString();
-        sibling = rowIndex.sibling(addressNumber, AddressTableModel::Address);
-        address = sibling.data(Qt::DisplayRole).toString().toStdString();
-
-        CKeyID key;
-        this->getKeyId(CBTCUAddress(address), key);
-        CPubKey pubKey;
-        this->getPubKey(key, pubKey);
-        CAmount reward = 0;
-        wallet->pLeasingManager->CalcLeasingReward(pubKey, reward);
-        amount += reward;
-    }
-    if (amount < 0) amount = 0;
-    return amount;
+    std::vector<COutput> coins;
+    return pwalletMain->GetAvailableLeasingRewards(coins);
 }
 
 bool WalletModel::isColdStaking() const

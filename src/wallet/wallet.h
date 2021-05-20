@@ -293,7 +293,7 @@ public:
     // Get available p2l utxo
     void GetAvailableP2LCoins(std::vector<COutput>& vCoins, const bool fOnlyLeaser = true) const;
     bool GetMaxP2LCoins(CPubKey& pubKeyRet, CKey& keyRet, CAmount& amount) const;
-    void GetAvailableLeasingRewards(std::vector<COutput>& vCoins) const;
+    CAmount GetAvailableLeasingRewards(std::vector<COutput>& vCoins) const;
 
     std::map<CBTCUAddress, std::vector<COutput> > AvailableCoinsByAddress(bool fConfirmed = true, CAmount maxCoinValue = 0);
     bool SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int nConfTheirs, std::vector<COutput> vCoins, std::set<std::pair<const CWalletTx*, unsigned int> >& setCoinsRet, CAmount& nValueRet) const;
