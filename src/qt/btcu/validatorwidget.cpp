@@ -700,6 +700,12 @@ void ValidatorWidget::showEvent(QShowEvent *event){
         connect(timer, &QTimer::timeout, [this]() {mnModel->updateMNList();});
     }
     timer->start(30000);*/
+    if(ui->pbnVote->isChecked())
+        onpbnVoteClicked();
+    else if(ui->pbnRegistered->isChecked())
+        onpbnRegisteredClicked();
+    else if(ui->pbnActive->isChecked())
+        onpbnActiveClicked();
 }
 
 void ValidatorWidget::hideEvent(QHideEvent *event){
