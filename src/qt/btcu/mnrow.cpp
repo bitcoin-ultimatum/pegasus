@@ -30,7 +30,7 @@ void MNRow::updateView(std::string name, std::string address, double leasing, in
     ui->labelLeasing->setText(QString::number(leasing, 'g', 12));
     ui->labelBlockHeight->setText(blockHeight != -1 ? QString::number(blockHeight) : "-");
     ui->labelType->setText(type);
-    ui->labelProfit->setText(profit > 0 ? QString::number(profit, 'g', 12) : "-");
+    ui->labelProfit->setText(profit > 0 ? QString::number(profit, 'g', 10) : "-");
 }
 
 void MNRow::setIndex(QModelIndex index)

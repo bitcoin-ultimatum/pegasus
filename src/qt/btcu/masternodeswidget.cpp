@@ -430,6 +430,7 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
 
                 CAmount leasingAmount;
                 CAmount reward;
+                double roundReward, roundAmount;
 #ifdef ENABLE_LEASING_MANAGER
                 assert(pwalletMain != NULL);
                 LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -438,6 +439,8 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
                     pwalletMain->pLeasingManager->GetAllAmountsLeasedTo(pubKey, leasingAmount);
                     pwalletMain->pLeasingManager->CalcLeasingReward(pubKey, reward);
                 }
+                roundAmount = round(leasingAmount) / 100000000.0;
+                roundReward = round(reward) / 100000000.0;
 #endif
 
                 if (SpacerNodeMy) {
@@ -449,8 +452,7 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
                 mnrow->setIndex(index);
                 mnrow->setGraphicsEffect(shadowEffect);
                 connect(mnrow.get(), SIGNAL(onMenuClicked(QModelIndex)), this, SLOT(onpbnMenuClicked(QModelIndex)));
-                mnrow->updateView(name, address, double(leasingAmount / 100000000.0), blockHeight, type,
-                                  double(reward / 100000000.0));
+                mnrow->updateView(name, address, roundAmount, blockHeight, type, roundReward);
                 ui->scrollAreaWidgetContentsMy->layout()->addWidget(mnrow.get());
                 MNRows.push_back(mnrow);
 
