@@ -94,13 +94,13 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>40</height>
+            <height>50</height>
            </size>
           </property>
           <property name="styleSheet">
@@ -184,6 +184,18 @@
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QWidget" name="contentName" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="0,1">
                <property name="leftMargin">
                 <number>0</number>
@@ -198,7 +210,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -210,7 +222,7 @@
                 <widget class="QLabel" name="textName">
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -239,6 +251,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentAddress" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,2">
                <property name="leftMargin">
                 <number>0</number>
@@ -262,7 +286,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -280,7 +304,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -309,6 +333,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentPubKey" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,2,0">
                <property name="leftMargin">
                 <number>0</number>
@@ -332,7 +368,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -350,7 +386,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -407,6 +443,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentIP" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,0">
                <property name="spacing">
                 <number>0</number>
@@ -433,7 +481,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -451,7 +499,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -480,6 +528,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentTxId" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,0">
                <property name="leftMargin">
                 <number>0</number>
@@ -494,7 +554,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -506,7 +566,7 @@
                 <widget class="QLabel" name="textTxId">
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -557,6 +617,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentOutIndex" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,2">
                <property name="leftMargin">
                 <number>0</number>
@@ -580,7 +652,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -592,7 +664,7 @@
                 <widget class="QLabel" name="textOutIndex">
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -621,6 +693,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentStatus" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
                <property name="leftMargin">
                 <number>0</number>
@@ -635,7 +719,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -647,7 +731,7 @@
                 <widget class="QLabel" name="textStatus">
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -676,6 +760,18 @@
             </item>
             <item>
              <widget class="QWidget" name="contentExport" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="3,0">
                <property name="leftMargin">
                 <number>0</number>
@@ -690,7 +786,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>12</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="styleSheet">

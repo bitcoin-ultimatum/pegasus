@@ -28,7 +28,8 @@ MnInfoDialog::MnInfoDialog(QWidget *parent) :
     QList<QWidget*> lWidjets = {ui->labelName, ui->textName, ui->labelAddress, ui->textAddress, ui->labelPubKey, ui->textPubKey, ui->labelIP, ui->textIP,
                                ui->labelTxId, ui->textTxId, ui->labelOutIndex, ui->textOutIndex, ui->labelStatus, ui->textStatus, ui->textExport};
     for(int i = 0; i < lWidjets.size(); ++i)
-        setCssSubtitleScreen(lWidjets.at(i));
+        setCssProperty(lWidjets.at(i), "text-body1-dialog-uncheck");
+
     setCssProperty({ui->labelDivider1, ui->labelDivider2, ui->labelDivider3, ui->labelDivider4, ui->labelDivider5, ui->labelDivider6, ui->labelDivider7, ui->labelDivider8}, "container-divider");
     setCssProperty({ui->pushCopyKey, ui->pushCopyId, ui->pushExport}, "ic-copy-big");
     setCssProperty(ui->btnEsc, "ic-close");
@@ -44,11 +45,11 @@ void MnInfoDialog::setData(QString name, QString address, QString pubKey, QStrin
     this->txId = txId;
     QString shortPubKey = pubKey;
     QString shortTxId = txId;
-    if(shortPubKey.length() > 20) {
-        shortPubKey = shortPubKey.left(13) + "..." + shortPubKey.right(13);
+    if(shortPubKey.length() > 43) {
+        shortPubKey = shortPubKey.left(20) + "..." + shortPubKey.right(20);
     }
-    if(shortTxId.length() > 20) {
-        shortTxId = shortTxId.left(12) + "..." + shortTxId.right(12);
+    if(shortTxId.length() > 37) {
+        shortTxId = shortTxId.left(17) + "..." + shortTxId.right(17);
     }
     ui->textName->setText(name);
     ui->textAddress->setText(address);
