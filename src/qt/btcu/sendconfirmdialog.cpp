@@ -141,6 +141,7 @@ void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index){
 void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx){
     this->model = model;
     this->tx = &tx;
+    nDisplayUnit = 0;
     CAmount txFee = tx.getTransactionFee();
     CAmount totalAmount = tx.getTotalTransactionAmount() + txFee;
 
