@@ -21,7 +21,9 @@ public:
     explicit MNRow(QWidget *parent = nullptr);
     ~MNRow();
 
-    void updateView(std::string name, std::string address, double leasing, int blockHeight, QString type, double profit);
+    void setView(std::string name, std::string address, double leasing, int blockHeight, QString type, double profit);
+    void updateView(double leasing, double profit);
+    QString getAddress() const noexcept;
     void setIndex(QModelIndex index);
     QModelIndex getIndex();
 

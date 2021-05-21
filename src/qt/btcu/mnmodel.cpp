@@ -166,6 +166,11 @@ QString MNModel::getPrivKey(QString MNname)
     return QString::fromStdString(key);
 }
 
+int MNModel::getCount() const noexcept
+{
+    return nodes.size();
+}
+
 bool MNModel::isCollateralAccepted(QString MNname)
 {
     auto iter = nodes.find(MNname);

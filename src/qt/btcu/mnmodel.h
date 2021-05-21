@@ -48,6 +48,7 @@ public:
     QString getOutputIndex(QString MNname);
     QString getStatus(QString MNname);
     QString getPrivKey(QString MNname);
+    int getCount() const noexcept;
     bool isCollateralAccepted(QString MNname);
 
     bool isMNsNetworkSynced();

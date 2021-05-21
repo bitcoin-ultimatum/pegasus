@@ -24,13 +24,24 @@ MNRow::MNRow(QWidget *parent) :
 
 }
 
-void MNRow::updateView(std::string name, std::string address, double leasing, int blockHeight, QString type, double profit){
+void MNRow::setView(std::string name, std::string address, double leasing, int blockHeight, QString type, double profit){
     ui->labelName->setText(QString::fromStdString(name));
     ui->labelAddress->setText(QString::fromStdString(address));
     ui->labelLeasing->setText(QString::number(leasing, 'g', 12));
     ui->labelBlockHeight->setText(blockHeight != -1 ? QString::number(blockHeight) : "-");
     ui->labelType->setText(type);
     ui->labelProfit->setText(profit > 0 ? QString::number(profit, 'g', 10) : "-");
+}
+
+void MNRow::updateView(double leasing, double profit)
+{
+    ui->labelLeasing->setText(QString::number(leasing, 'g', 12));
+    ui->labelProfit->setText(profit > 0 ? QString::number(profit, 'g', 10) : "-");
+}
+
+QString MNRow::getAddress() const noexcept
+{
+    return ui->labelAddress->text();
 }
 
 void MNRow::setIndex(QModelIndex index)

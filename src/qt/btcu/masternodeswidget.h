@@ -63,6 +63,7 @@ private Q_SLOTS:
     void updateListState();
     void updateModelAndInform(QString informText);
     void onpbnMenuClicked(QModelIndex index);
+    void onMasternodesUpdate();
 
    void onTempADD();
    void onpbnMasternodeClicked();

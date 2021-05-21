@@ -187,6 +187,8 @@ MasterNodesWidget::MasterNodesWidget(BTCUGUI *parent) :
     connect(ui->btnAbout, &OptionButton::clicked, [this](){window->openFAQ(9);});
     connect(ui->btnAboutController, &OptionButton::clicked, [this](){window->openFAQ(10);});
 */
+
+    timer = new QTimer(this);
 }
 
 void MasterNodesWidget::onTempADD()
@@ -428,9 +430,8 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
                         type = "Masternode";
                 }
 
-                CAmount leasingAmount;
-                CAmount reward;
-                double roundReward, roundAmount;
+                CAmount leasingAmount, reward;
+                double roundReward, roundAmount = 0;
 #ifdef ENABLE_LEASING_MANAGER
                 assert(pwalletMain != NULL);
                 LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -452,7 +453,7 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
                 mnrow->setIndex(index);
                 mnrow->setGraphicsEffect(shadowEffect);
                 connect(mnrow.get(), SIGNAL(onMenuClicked(QModelIndex)), this, SLOT(onpbnMenuClicked(QModelIndex)));
-                mnrow->updateView(name, address, roundAmount, blockHeight, type, roundReward);
+                mnrow->setView(name, address, roundAmount, blockHeight, type, roundReward);
                 ui->scrollAreaWidgetContentsMy->layout()->addWidget(mnrow.get());
                 MNRows.push_back(mnrow);
 
@@ -464,6 +465,7 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
 
     showHistory();
 }
+
 void MasterNodesWidget::onpbnGlobalMasternodesClicked()
 {
     clearScrollWidget();
@@ -494,6 +496,44 @@ void MasterNodesWidget::onpbnGlobalMasternodesClicked()
    showHistory();
 }
 
+void MasterNodesWidget::onMasternodesUpdate()
+{
+    if(mnModel->getCount() != MNRows.size())
+    {
+        clearScrollWidget();
+
+        if (ui->pbnMyMasternodes->isChecked())
+            onpbnMyMasternodesClicked();
+        else
+            onpbnGlobalMasternodesClicked();
+        return;
+    }
+
+    for(auto rowsPtr : MNRows)
+    {
+        CKeyID key;
+        walletModel->getKeyId(CBTCUAddress(rowsPtr->getAddress().toStdString()), key);
+        CPubKey pubKey;
+        walletModel->getPubKey(key, pubKey);
+
+        CAmount leasingAmount, reward;
+        double roundReward, roundAmount = 0;
+#ifdef ENABLE_LEASING_MANAGER
+        assert(pwalletMain != NULL);
+        LOCK2(cs_main, pwalletMain->cs_wallet);
+
+        if (pwalletMain->pLeasingManager) {
+            pwalletMain->pLeasingManager->GetAllAmountsLeasedTo(pubKey, leasingAmount);
+            pwalletMain->pLeasingManager->CalcLeasingReward(pubKey, reward);
+        }
+        roundAmount = round(leasingAmount) / 100000000.0;
+        roundReward = round(reward) / 100000000.0;
+#endif
+
+        rowsPtr->updateView(roundAmount, roundReward);
+    }
+}
+
 void MasterNodesWidget::clearScrollWidget()
 {
     if (ui->pbnMyMasternodes->isChecked())
@@ -514,22 +554,23 @@ void MasterNodesWidget::clearScrollWidget()
     }
 }
 
-void MasterNodesWidget::showEvent(QShowEvent *event){
-    /*if (mnModel) mnModel->updateMNList();
-    if(!timer) {
-        timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, [this]() {mnModel->updateMNList();});
-    }
-    timer->start(30000);*/
+void MasterNodesWidget::showEvent(QShowEvent *event)
+{
     if(ui->pbnMyMasternodes->isChecked())
         onpbnMyMasternodesClicked();
     else if(ui->pbnGlobalMasternodes->isChecked())
         onpbnGlobalMasternodesClicked();
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(onMasternodesUpdate()));
+    timer->start(10000);
 }
 
-void MasterNodesWidget::hideEvent(QHideEvent *event){
-    //if(timer) timer->stop();
+void MasterNodesWidget::hideEvent(QHideEvent *event)
+{
     clearScrollWidget();
+
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(onMasternodesUpdate()));
+    timer->stop();
 }
 
 void MasterNodesWidget::loadWalletModel(){
@@ -704,7 +745,7 @@ void MasterNodesWidget::onInfoMNClicked() {
 }
 
 void MasterNodesWidget::onDeleteMNClicked(){
-    //delete only MN info in masternode.conf, masternode still can use
+    //delete only MN info in masternode.conf, masternode still can be used
     QString name = index.sibling(index.row(), AddressTableModel::Label).data(Qt::DisplayRole).toString();
     QString MN = name + " - " + index.data(Qt::DisplayRole).toString();
     std::string aliasToRemove = name.toStdString();
