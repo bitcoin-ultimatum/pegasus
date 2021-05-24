@@ -36,7 +36,8 @@ void MNRow::setView(std::string name, std::string address, double leasing, int b
 void MNRow::updateView(double leasing, double profit)
 {
     ui->labelLeasing->setText(QString::number(leasing, 'g', 12));
-    ui->labelProfit->setText(profit > 0 ? QString::number(profit, 'g', 10) : "-");
+    if(profit != 0)
+        ui->labelProfit->setText(QString::number(profit, 'g', 10));
 }
 
 QString MNRow::getAddress() const noexcept

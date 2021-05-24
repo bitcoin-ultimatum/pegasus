@@ -539,6 +539,7 @@ bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet,
         // 0 is TRXHASH
         // 1 is N
         addressRet = CKeyID(uint160(vSolutions[2]));
+        return true;
     }
     // Multisig txns have more than one address...
     return false;

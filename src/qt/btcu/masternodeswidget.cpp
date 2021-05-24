@@ -187,8 +187,8 @@ MasterNodesWidget::MasterNodesWidget(BTCUGUI *parent) :
     connect(ui->btnAbout, &OptionButton::clicked, [this](){window->openFAQ(9);});
     connect(ui->btnAboutController, &OptionButton::clicked, [this](){window->openFAQ(10);});
 */
-
     timer = new QTimer(this);
+    day = QDateTime::currentDateTime().toString("dd.MM.yy");
 }
 
 void MasterNodesWidget::onTempADD()
@@ -430,19 +430,18 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
                         type = "Masternode";
                 }
 
-                CAmount leasingAmount, reward;
-                double roundReward, roundAmount = 0;
+                CAmount leasingAmount;
+                double roundAmount = 0.0;
 #ifdef ENABLE_LEASING_MANAGER
                 assert(pwalletMain != NULL);
                 LOCK2(cs_main, pwalletMain->cs_wallet);
 
-                if (pwalletMain->pLeasingManager) {
+                if (pwalletMain->pLeasingManager)
                     pwalletMain->pLeasingManager->GetAllAmountsLeasedTo(pubKey, leasingAmount);
-                    pwalletMain->pLeasingManager->CalcLeasingReward(pubKey, reward);
-                }
                 roundAmount = round(leasingAmount) / 100000000.0;
-                roundReward = round(reward) / 100000000.0;
 #endif
+
+                double reward = calculateDailyReward(QString::fromStdString(address));
 
                 if (SpacerNodeMy) {
                     ui->scrollAreaWidgetContentsMy->layout()->removeItem(SpacerNodeMy);
@@ -453,7 +452,7 @@ void MasterNodesWidget::onpbnMyMasternodesClicked()
                 mnrow->setIndex(index);
                 mnrow->setGraphicsEffect(shadowEffect);
                 connect(mnrow.get(), SIGNAL(onMenuClicked(QModelIndex)), this, SLOT(onpbnMenuClicked(QModelIndex)));
-                mnrow->setView(name, address, roundAmount, blockHeight, type, roundReward);
+                mnrow->setView(name, address, roundAmount, blockHeight, type, reward);
                 ui->scrollAreaWidgetContentsMy->layout()->addWidget(mnrow.get());
                 MNRows.push_back(mnrow);
 
@@ -496,6 +495,34 @@ void MasterNodesWidget::onpbnGlobalMasternodesClicked()
    showHistory();
 }
 
+double MasterNodesWidget::calculateDailyReward(QString address)
+{
+    double reward = 0.0;
+    for(int txNumber = 0; txNumber < txFilter->rowCount(); ++txNumber)
+    {
+        QModelIndex rowIndex = txFilter->index(txNumber, TransactionTableModel::Date);
+        QDateTime date = rowIndex.data(TransactionTableModel::DateRole).toDateTime();
+        if(date.toString("dd.MM.yyyy") == QDateTime::currentDateTime().toString("dd.MM.yyyy"))
+            continue;
+        else if(date.toString("dd.MM.yyyy") == QDateTime::currentDateTime().addDays(-1).toString("dd.MM.yyyy"))
+        {
+            QModelIndex rowIndexType = txFilter->index(txNumber, TransactionTableModel::Type);
+            int type = rowIndexType.data(TransactionTableModel::TypeRole).toInt();
+            if(type == TransactionRecord::LeasingReward)
+            {
+                QModelIndex rowIndexAddress = txFilter->index(txNumber, TransactionTableModel::ToAddress);
+                QString txAddress = rowIndexAddress.data(TransactionTableModel::AddressRole).toString();
+                std::cout << txAddress.toStdString() << " " << address.toStdString() << std::endl;
+                if(txAddress == address)
+                    reward += rowIndex.data(TransactionTableModel::AmountRole).toDouble() / 100000000;
+            }
+        }
+        else
+            break;
+    }
+    return reward;
+}
+
 void MasterNodesWidget::onMasternodesUpdate()
 {
     if(mnModel->getCount() != MNRows.size())
@@ -516,21 +543,25 @@ void MasterNodesWidget::onMasternodesUpdate()
         CPubKey pubKey;
         walletModel->getPubKey(key, pubKey);
 
-        CAmount leasingAmount, reward;
-        double roundReward, roundAmount = 0;
+        CAmount leasingAmount;
+        double roundAmount = 0.0;
 #ifdef ENABLE_LEASING_MANAGER
         assert(pwalletMain != NULL);
         LOCK2(cs_main, pwalletMain->cs_wallet);
 
-        if (pwalletMain->pLeasingManager) {
+        if (pwalletMain->pLeasingManager)
             pwalletMain->pLeasingManager->GetAllAmountsLeasedTo(pubKey, leasingAmount);
-            pwalletMain->pLeasingManager->CalcLeasingReward(pubKey, reward);
-        }
         roundAmount = round(leasingAmount) / 100000000.0;
-        roundReward = round(reward) / 100000000.0;
 #endif
 
-        rowsPtr->updateView(roundAmount, roundReward);
+        double reward = 0.0;
+        if(day != QDateTime::currentDateTime().toString("dd.MM.yy"))
+        {
+            reward = calculateDailyReward(rowsPtr->getAddress());
+            day = QDateTime::currentDateTime().toString("dd.MM.yy");
+        }
+
+        rowsPtr->updateView(roundAmount, reward);
     }
 }
 
@@ -579,6 +610,16 @@ void MasterNodesWidget::loadWalletModel(){
         addressTableModel = walletModel->getAddressTableModel();
         filter = new AddressFilterProxyModel(QString(AddressTableModel::Receive), this);
         filter->setSourceModel(addressTableModel);
+
+        txModel = walletModel->getTransactionTableModel();
+        txFilter = new TransactionFilterProxy();
+        txFilter->setDynamicSortFilter(true);
+        txFilter->setSortCaseSensitivity(Qt::CaseInsensitive);
+        txFilter->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        txFilter->setSortRole(Qt::EditRole);
+        txFilter->setSourceModel(txModel);
+        txFilter->sort(TransactionTableModel::Date, Qt::DescendingOrder);
+        txFilter->setTypeFilter(TransactionFilterProxy::TYPE(TransactionRecord::LeasingReward));
     }
    /* if(walletModel) {
         ui->listMn->setModel(mnModel);

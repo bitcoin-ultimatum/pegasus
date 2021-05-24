@@ -13,11 +13,14 @@
 #include "qt/btcu/mnrow.h"
 #include "qt/btcu/mnmodel.h"
 #include "qt/btcu/tooltipmenu.h"
+#include "qt/transactiontablemodel.h"
+#include "qt/transactionfilterproxy.h"
 #include "addresstablemodel.h"
 #include <QTimer>
 #include <atomic>
 #include <QSpacerItem>
 #include <QSharedPointer>
+#include <QDateTime>
 
 #define CREATE_MN_AMOUNT 1000
 
@@ -75,12 +78,15 @@ private:
     Ui::MasterNodesWidget *ui;
     FurAbstractListItemDelegate *delegate;
     AddressTableModel* addressTableModel = nullptr;
+    TransactionTableModel* txModel = nullptr;
     AddressFilterProxyModel *filter = nullptr;
+    TransactionFilterProxy* txFilter = nullptr;
     MNModel *mnModel = nullptr;
     TooltipMenu* menu = nullptr;
    TooltipMenu* menuMy = nullptr;
     QModelIndex index;
     QTimer *timer = nullptr;
+    QString day;
 
     QVector<QSharedPointer<MNRow>> MNRows;
     std::atomic<bool> isLoading;
@@ -90,6 +96,7 @@ private:
     bool startAll(QString& failedMN, bool onlyMissing);
     bool startMN(CMasternodeConfig::CMasternodeEntry mne, std::string& strError);
     void removeMNLine();
+    double calculateDailyReward(QString address);
 // temp
    bool bShowHistory = false;
    bool bShowHistoryMy = false;

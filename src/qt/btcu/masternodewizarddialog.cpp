@@ -254,23 +254,12 @@ bool MasterNodeWizardDialog::createMN(){
 
         // second create mn address
         QString addressLabel = ui->lineEditName->text().trimmed();
-
         std::string alias = addressLabel.toStdString();
-
-        QString addressStr = ui->lineEditIpAddress->text();
+        QString ipStr = ui->lineEditIpAddress->text();
         QString portStr = ui->lineEditPort->text();
-        if (addressStr.isEmpty() || portStr.isEmpty()) {
-            returnStr = tr("IP or port cannot be empty");
-            return false;
-        }
-        // TODO: Validate IP address..
         int portInt = portStr.toInt();
-        if (portInt <= 0 && portInt > 999999){
-            returnStr = tr("Invalid port number");
-            return false;
-        }
         // ip + port
-        std::string ipAddress = addressStr.toStdString();
+        std::string ipAddress = ipStr.toStdString();
         std::string port = portStr.toStdString();
 
         // New receive address
@@ -391,7 +380,7 @@ bool MasterNodeWizardDialog::createMN(){
                 std::string indexOutStr = std::to_string(indexOut);
 
                 // Check IP address type
-                QHostAddress hostAddress(addressStr);
+                QHostAddress hostAddress(ipStr);
                 QAbstractSocket::NetworkLayerProtocol layerProtocol = hostAddress.protocol();
                 if (layerProtocol == QAbstractSocket::IPv6Protocol) {
                     ipAddress = "["+ipAddress+"]";
