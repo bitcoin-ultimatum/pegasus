@@ -99,16 +99,11 @@ MasterNodesWidget::MasterNodesWidget(BTCUGUI *parent) :
     this->setStyleSheet(parent->styleSheet());
 
     /* Containers */
-    //setCssProperty(ui->left, "container");
-    //ui->left->setContentsMargins(0,20,0,20);
-    //setCssProperty(ui->right, "container-right");
-    //ui->right->setContentsMargins(20,20,20,20);
-   //ui->right->setVisible(false);
    setCssProperty(ui->scrollArea, "container");
    setCssProperty(ui->scrollAreaMy, "container");
     ui->scrollAreaMy->resize(50, ui->scrollAreaMy->height());
    this->setGraphicsEffect(0);
-   //ui->scrollAreaMy->setGraphicsEffect(0);
+
     /* Light Font */
     QFont fontLight;
     fontLight.setWeight(QFont::Light);
@@ -129,9 +124,6 @@ MasterNodesWidget::MasterNodesWidget(BTCUGUI *parent) :
    ui->labelEmpty->setText(tr("No active Masternode yet"));
    setCssProperty(ui->labelEmpty, "text-empty");
 
-    //ui->labelSubtitle1->setText(tr("Full nodes that incentivize node operators to perform the core consensus functions \n and vote on trasury system receiving a periodic reward."));
-    //setCssSubtitleScreen(ui->labelSubtitle1);
-
     /* Buttons */
    //ui->pbnGlobalMasternodes->setProperty("cssClass","btn-secundary-small");
    ui->pbnGlobalMasternodes->setProperty("cssClass","btn-check-left");
@@ -150,43 +142,6 @@ MasterNodesWidget::MasterNodesWidget(BTCUGUI *parent) :
    connect(ui->pbnGlobalMasternodes, SIGNAL(clicked()), this, SLOT(onpbnGlobalMasternodesClicked()));
    showHistory();
 
-   /*ui->pushButtonSave->setText(tr("Create Masternode Controller"));
-    setCssBtnPrimary(ui->pushButtonSave);
-    setCssBtnPrimary(ui->pushButtonStartAll);
-    setCssBtnPrimary(ui->pushButtonStartMissing);
-   ui->pushButtonSave->setVisible(false);
-   ui->pushButtonStartAll->setVisible(false);
-   ui->pushButtonStartMissing->setVisible(false);*/
-
-    /* Options */
-    /*ui->btnAbout->setTitleClassAndText("btn-title-grey", "What is a Masternode?");
-    ui->btnAbout->setSubTitleClassAndText("text-subtitle", "FAQ explaining what Masternodes are");
-    ui->btnAboutController->setTitleClassAndText("btn-title-grey", "What is a Controller?");
-    ui->btnAboutController->setSubTitleClassAndText("text-subtitle", "FAQ explaining what is a Masternode Controller");
-
-    setCssProperty(ui->listMn, "container");
-    ui->listMn->setItemDelegate(delegate);
-    ui->listMn->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
-    ui->listMn->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
-    ui->listMn->setAttribute(Qt::WA_MacShowFocusRect, false);
-    ui->listMn->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    ui->emptyContainer->setVisible(false);
-    setCssProperty(ui->pushImgEmpty, "img-empty-master");
-    ui->labelEmpty->setText(tr("No active Masternode yet"));
-    setCssProperty(ui->labelEmpty, "text-empty");
-
-    connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(onCreateMNClicked()));
-    connect(ui->pushButtonStartAll, &QPushButton::clicked, [this]() {
-        onStartAllClicked(REQUEST_START_ALL);
-    });
-    connect(ui->pushButtonStartMissing, &QPushButton::clicked, [this]() {
-        onStartAllClicked(REQUEST_START_MISSING);
-    });
-    connect(ui->listMn, SIGNAL(clicked(QModelIndex)), this, SLOT(onMNClicked(QModelIndex)));
-    connect(ui->btnAbout, &OptionButton::clicked, [this](){window->openFAQ(9);});
-    connect(ui->btnAboutController, &OptionButton::clicked, [this](){window->openFAQ(10);});
-*/
     timer = new QTimer(this);
     day = QDateTime::currentDateTime().toString("dd.MM.yy");
 }
@@ -271,7 +226,7 @@ void MasterNodesWidget::onpbnMenuClicked(QModelIndex index)
 
          //connect(this->menuMy, &TooltipMenu::message, this, &AddressesWidget::message);
          //connect(this->menuMy, SIGNAL(onEditClicked()), this, SLOT(onUpgradeMNClicked()), Qt::UniqueConnection);
-         //connect(this->menuMy, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteMNClicked()));
+         connect(this->menuMy, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteMNClicked()));
          connect(this->menuMy, SIGNAL(onCopyClicked()), this, SLOT(onInfoMNClicked()));
       }else {
          this->menuMy->hide();
@@ -621,11 +576,6 @@ void MasterNodesWidget::loadWalletModel(){
         txFilter->sort(TransactionTableModel::Date, Qt::DescendingOrder);
         txFilter->setTypeFilter(TransactionFilterProxy::TYPE(TransactionRecord::LeasingReward));
     }
-   /* if(walletModel) {
-        ui->listMn->setModel(mnModel);
-        ui->listMn->setModelColumn(AddressTableModel::Label);
-        updateListState();
-    }*/
 }
 
 void MasterNodesWidget::updateListState() {
@@ -794,6 +744,9 @@ void MasterNodesWidget::onDeleteMNClicked(){
     if (!ask(tr("Delete Masternode"), tr("You are just about to delete Masternode:\n%1\n\nAre you sure?").arg(MN)))
         return;
 
+    CTxDestination address = CBTCUAddress(index.data(Qt::DisplayRole).toString().toStdString()).Get();
+    pwalletMain->DelAddressBook(address);
+
     std::string strConfFile = "masternode.conf";
     std::string strDataDir = GetDataDir().string();
     if (strConfFile != boost::filesystem::basename(strConfFile) + boost::filesystem::extension(strConfFile)){
@@ -881,36 +834,13 @@ void MasterNodesWidget::onDeleteMNClicked(){
 }
 
 void MasterNodesWidget::removeMNLine() {
-    for (int i = 0; i < MNRows.size(); i++)
-    {
-        if(this->index == MNRows.at(i)->getIndex()) {
+    for (int i = 0; i < MNRows.size(); i++) {
+        if (this->index == MNRows.at(i)->getIndex()) {
+            ui->scrollAreaWidgetContentsMy->layout()->removeWidget(MNRows.at(i).get());
             MNRows.remove(i);
             break;
         }
     }
-}
-
-void MasterNodesWidget::onCreateMNClicked(){
-    /*if(verifyWalletUnlocked()) {
-        if(walletModel->getBalance() <= (COIN * 10000)){
-            inform(tr("Not enough balance to create a masternode, 10,000 BTCU required."));
-            return;
-        }
-        showHideOp(true);
-        MasterNodeWizardDialog *dialog = new MasterNodeWizardDialog(walletModel, window);
-        if(openDialogWithOpaqueBackgroundY(dialog, window, 5, 7)) {
-            if (dialog->isOk) {
-                // Update list
-                mnModel->addMn(dialog->mnEntry);
-                updateListState();
-                // add mn
-                inform(dialog->returnStr);
-            } else {
-                warn(tr("Error creating masternode"), dialog->returnStr);
-            }
-        }
-        dialog->deleteLater();
-    }*/
 }
 
 void MasterNodesWidget::changeTheme(bool isLightTheme, QString& theme){

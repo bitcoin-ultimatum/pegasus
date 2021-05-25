@@ -57,7 +57,6 @@ Q_SIGNALS:
    void CreateMasternode();
 
 private Q_SLOTS:
-    void onCreateMNClicked();
     void onStartAllClicked(int type);
     void changeTheme(bool isLightTheme, QString &theme) override;
     void onUpgradeMNClicked();

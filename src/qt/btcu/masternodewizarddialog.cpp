@@ -298,6 +298,8 @@ bool MasterNodeWizardDialog::createMN(){
 
         if (prepareStatus.status != WalletModel::OK) {
             returnStr = tr("Prepare master node failed.\n\n%1\n").arg(returnMsg);
+            CTxDestination newAddress = address.Get();
+            pwalletMain->DelAddressBook(newAddress);
             return false;
         }
 
@@ -325,6 +327,8 @@ bool MasterNodeWizardDialog::createMN(){
 
                 if (!streamConfig.good()) {
                     returnStr = tr("Invalid masternode.conf file");
+                    CTxDestination newAddress = address.Get();
+                    pwalletMain->DelAddressBook(newAddress);
                     return false;
                 }
 
@@ -348,6 +352,8 @@ bool MasterNodeWizardDialog::createMN(){
                         if (!(iss >> alias >> ip >> privKey >> txHash >> outputIndex)) {
                             streamConfig.close();
                             returnStr = tr("Error parsing masternode.conf file");
+                            CTxDestination newAddress = address.Get();
+                            pwalletMain->DelAddressBook(newAddress);
                             return false;
                         }
                     }
@@ -375,6 +381,8 @@ bool MasterNodeWizardDialog::createMN(){
                 }
                 if (indexOut == -1) {
                     returnStr = tr("Invalid collateral output index");
+                    CTxDestination newAddress = address.Get();
+                    pwalletMain->DelAddressBook(newAddress);
                     return false;
                 }
                 std::string indexOutStr = std::to_string(indexOut);
@@ -414,6 +422,9 @@ bool MasterNodeWizardDialog::createMN(){
         } else {
             returnStr = tr("Cannot send collateral transaction.\n\n%1").arg(returnMsg);
         }
+
+        CTxDestination newAddress = address.Get();
+        pwalletMain->DelAddressBook(newAddress);
     }
     return false;
 }
