@@ -264,7 +264,7 @@ bool MasterNodeWizardDialog::createMN(){
 
         // New receive address
         CBTCUAddress address;
-        PairResult r = walletModel->getNewAddress(address, alias);
+        PairResult r = walletModel->getNewLeasingAddress(address, alias);
 
         if (!r.result) {
             // generate address fail

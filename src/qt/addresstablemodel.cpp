@@ -105,6 +105,7 @@ public:
     int sendNum = 0;
     int recvNum = 0;
     int dellNum = 0;
+    int leasingNum = 0;
     int coldSendNum = 0;
     int leasingSendNum = 0;
     AddressTableModel* parent;
@@ -161,7 +162,9 @@ public:
             var = &sendNum;
         } else if (purpose == AddressBook::AddressBookPurpose::COLD_STAKING_SEND) {
             var = &coldSendNum;
-        } else if (purpose == AddressBook::AddressBookPurpose::LEASING_SEND) {
+        }else if(purpose == AddressBook::AddressBookPurpose::LEASING) {
+            var = &leasingNum;
+        }else if (purpose == AddressBook::AddressBookPurpose::LEASING_SEND) {
             var = &leasingSendNum;
         } else if (purpose == AddressBook::AddressBookPurpose::DELEGABLE || purpose == AddressBook::AddressBookPurpose::DELEGATOR) {
             var = &dellNum;
@@ -282,6 +285,10 @@ public:
         return dellNum;
     }
 
+    int sizeLeasing(){
+        return leasingNum;
+    }
+
     int SizeColdSend() {
         return coldSendNum;
     }
@@ -333,6 +340,10 @@ int AddressTableModel::sizeRecv() const{
 
 int AddressTableModel::sizeDell() const {
     return priv->sizeDell();
+}
+
+int AddressTableModel::sizeLeasing() const {
+    return priv->sizeLeasing();
 }
 
 int AddressTableModel::sizeColdSend() const {
@@ -391,6 +402,8 @@ QVariant AddressTableModel::data(const QModelIndex& index, int role) const
                 return ColdStaking;
             case AddressTableEntry::ColdStakingSend:
                 return ColdStakingSend;
+            case AddressTableEntry::Leasing:
+                return Leasing;
             default:
                 break;
         }
@@ -406,6 +419,18 @@ bool AddressTableModel::setData(const QModelIndex& index, const QVariant& value,
     std::string strPurpose = (rec->type == AddressTableEntry::Sending ?
                                 AddressBook::AddressBookPurpose::SEND :
                                 AddressBook::AddressBookPurpose::RECEIVE);
+    switch(rec->type)
+    {
+        case AddressTableEntry::Sending:
+            strPurpose = AddressBook::AddressBookPurpose::SEND;
+            break;
+        case AddressTableEntry::Receiving:
+            strPurpose = AddressBook::AddressBookPurpose::RECEIVE;
+            break;
+        case AddressTableEntry::Leasing:
+            strPurpose = AddressBook::AddressBookPurpose::LEASING;
+            break;
+    }
     editStatus = OK;
 
     if (role == Qt::EditRole) {
@@ -525,7 +550,7 @@ QString AddressTableModel::addRow(const QString& type, const QString& label, con
                 return QString();
             }
         }
-    } else if (type == Receive) {
+    } else if (type == Receive || type == Leasing) {
         // Generate a new address to associate with given label
         CPubKey newKey;
         if (!wallet->GetKeyFromPool(newKey)) {
@@ -549,7 +574,7 @@ QString AddressTableModel::addRow(const QString& type, const QString& label, con
     {
         LOCK(wallet->cs_wallet);
         wallet->SetAddressBook(CBTCUAddress(strAddress).Get(), strLabel,
-            (type == Send ? AddressBook::AddressBookPurpose::SEND : AddressBook::AddressBookPurpose::RECEIVE));
+            (type == Send ? AddressBook::AddressBookPurpose::SEND : type == Receive ? AddressBook::AddressBookPurpose::RECEIVE : AddressBook::AddressBookPurpose::LEASING));
     }
     return QString::fromStdString(strAddress);
 }
@@ -629,7 +654,7 @@ QString AddressTableModel::getAddressToShow() const{
         for (auto it = wallet->mapAddressBook.rbegin(); it != wallet->mapAddressBook.rend(); ++it ) {
             if (it->second.purpose == AddressBook::AddressBookPurpose::RECEIVE) {
                 const CBTCUAddress &address = it->first;
-                if (address.IsValid() && IsMine(*wallet, address.Get())) {
+                if (address.IsValid() && IsMine(*wallet, address.Get()) && it->second.name == "Default") {
                     addressStr = QString::fromStdString(address.ToString());
                 }
             }

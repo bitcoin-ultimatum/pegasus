@@ -413,7 +413,7 @@ bool WalletModel::updateAddressBookLabels(const CTxDestination& dest, const std:
     } else if (mi->second.name != strName) {
         return wallet->SetAddressBook(dest, strName, ""); // "" means don't change purpose
     }else if (mi->second.name == strName) {
-       return wallet->SetAddressBook(dest, strName, "");
+       return wallet->SetAddressBook(dest, strName, strPurpose);
     }
     return false;
 }
@@ -623,7 +623,11 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
         // Don't touch the address book when we have a payment request
         if (!rcp.paymentRequest.IsInitialized()) {
             CBTCUAddress address = CBTCUAddress(rcp.address.toStdString());
-            std::string purpose = address.IsStakingAddress() ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND;
+            std::string purpose = "";
+            if(address.IsLeasingAddress())
+                purpose = AddressBook::AddressBookPurpose::LEASING;
+            else
+                purpose = address.IsStakingAddress() ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND;
             std::string strLabel = rcp.label.toStdString();
             updateAddressBookLabels(address.Get(), strLabel, purpose);
         }

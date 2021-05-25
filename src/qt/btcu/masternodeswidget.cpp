@@ -608,7 +608,7 @@ void MasterNodesWidget::loadWalletModel(){
     if(walletModel)
     {
         addressTableModel = walletModel->getAddressTableModel();
-        filter = new AddressFilterProxyModel(QString(AddressTableModel::Receive), this);
+        filter = new AddressFilterProxyModel(QString(AddressTableModel::Leasing), this);
         filter->setSourceModel(addressTableModel);
 
         txModel = walletModel->getTransactionTableModel();

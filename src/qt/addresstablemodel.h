@@ -63,6 +63,7 @@ public:
     int sizeSend() const;
     int sizeRecv() const;
     int sizeDell() const;
+    int sizeLeasing() const;
     int sizeColdSend() const;
     int sizeLeasingSend() const;
     void refreshAddressTable();

@@ -529,6 +529,8 @@ void LeasingWidget::onMoreInformationClicked()
 void LeasingWidget::loadWalletModel(){
     if(walletModel) {
         sendMultiRow->setWalletModel(walletModel);
+        menuOwner->setWalletModel(walletModel, AddressTableModel::Receive);
+        menuContacts->setWalletModel(walletModel, AddressTableModel::Send);
         txModel = walletModel->getTransactionTableModel();
         leasingModel.reset(new LeasingModel(walletModel->getAddressTableModel(), this));
         //ui->listView->setModel(leasingModel.get());
@@ -575,7 +577,7 @@ void LeasingWidget::loadWalletModel(){
         //ui->emptyContainer->setVisible(false);
         //ui->listView->setVisible(false);
 
-       onTempADD();
+       //onTempADD();
     }
 
 }
@@ -661,7 +663,7 @@ void LeasingWidget::onOwnerClicked()
         return;
     }
 
-    int contactsSize = walletModel->getAddressTableModel()->sizeRecv();
+    int contactsSize = walletModel->getAddressTableModel()->sizeLeasing();
     if(contactsSize == 0) {
         inform(tr( "No receive addresses available, you can go to the receive screen and create some there!"));
         return;
@@ -675,7 +677,7 @@ void LeasingWidget::onOwnerClicked()
 
     btnOwnerContact->setIcon(getIconComboBox(isLightTheme(), true));
 
-    menuOwner->setWalletModel(walletModel, AddressTableModel::Receive);
+    menuOwner->setType(AddressTableModel::Leasing);
     menuOwner->resizeList(width, height);
     menuOwner->setStyleSheet(styleSheet());
     menuOwner->adjustSize();
@@ -711,7 +713,7 @@ void LeasingWidget::onContactsClicked()
 
     menuContacts->setFixedSize(width, height);
 
-    menuContacts->setWalletModel(walletModel, AddressTableModel::Send);
+    menuContacts->setType(AddressTableModel::Send);
     menuContacts->resizeList(width, height);
     menuContacts->setStyleSheet(styleSheet());
     menuContacts->adjustSize();
@@ -906,7 +908,7 @@ void LeasingWidget::onSendClicked(){
         if (sendStatus.status == WalletModel::OK) {
             clearAll();
            informWarning(tr("Coins leased"));
-           onTempADD();
+           //onTempADD();
         }
     }
 
