@@ -624,10 +624,13 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
         if (!rcp.paymentRequest.IsInitialized()) {
             CBTCUAddress address = CBTCUAddress(rcp.address.toStdString());
             std::string purpose = "";
-            if(address.IsLeasingAddress())
-                purpose = AddressBook::AddressBookPurpose::LEASING;
+            if(address.IsStakingAddress())
+                purpose = AddressBook::AddressBookPurpose::COLD_STAKING_SEND;
+            else if(wallet->mapAddressBook.find(address.Get())->second.purpose == "send")
+                purpose = AddressBook::AddressBookPurpose::SEND;
             else
-                purpose = address.IsStakingAddress() ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND;
+                purpose = AddressBook::AddressBookPurpose::LEASING;
+
             std::string strLabel = rcp.label.toStdString();
             updateAddressBookLabels(address.Get(), strLabel, purpose);
         }

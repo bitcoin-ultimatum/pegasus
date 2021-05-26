@@ -467,7 +467,7 @@ double MasterNodesWidget::calculateDailyReward(QString address)
             {
                 QModelIndex rowIndexAddress = txFilter->index(txNumber, TransactionTableModel::ToAddress);
                 QString txAddress = rowIndexAddress.data(TransactionTableModel::AddressRole).toString();
-                std::cout << txAddress.toStdString() << " " << address.toStdString() << std::endl;
+
                 if(txAddress == address)
                     reward += rowIndex.data(TransactionTableModel::AmountRole).toDouble() / 100000000;
             }
@@ -598,7 +598,7 @@ void MasterNodesWidget::onUpgradeMNClicked(){
         QString name = index.sibling(index.row(), AddressTableModel::Label).data(Qt::DisplayRole).toString();
         if (mnModel->isCollateralAccepted(name)) {
             QString strAlias = this->index.data(Qt::DisplayRole).toString();//address
-            std::cout << strAlias.toStdString() << std::endl;
+
             if (ask(tr("Start Masternode"), tr("Are you sure you want to start masternode %1?\n").arg(strAlias))) {
                 if (!verifyWalletUnlocked()) return;
                 startAlias(strAlias);
