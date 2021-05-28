@@ -32,7 +32,7 @@
 
 class CLeasingManager: public CValidationInterface {
 public:
-    void GetAllAmountsLeasedFrom(CPubKey &pubKey, CAmount &amount) const;
+    void GetAllAmountsLeasedTo(CPubKey &pubKey, CAmount &amount) const;
     void CalcLeasingReward(CPubKey &pubKey, CAmount &amount) const;
 };
 
@@ -171,7 +171,7 @@ CAmount WalletModel::getColdStakedBalance() const
 CAmount WalletModel::getInLeasing()
 {
     AddressTableModel* addressTableModel = this->getAddressTableModel();
-    AddressFilterProxyModel *filter = new AddressFilterProxyModel(QString(AddressTableModel::Receive), this);
+    AddressFilterProxyModel *filter = new AddressFilterProxyModel(QString(AddressTableModel::Leasing), this);
     filter->setSourceModel(addressTableModel);
 
     std::string address = "";
@@ -190,7 +190,7 @@ CAmount WalletModel::getInLeasing()
         CPubKey pubKey;
         this->getPubKey(key, pubKey);
         CAmount leased = 0;
-        wallet->pLeasingManager->GetAllAmountsLeasedFrom(pubKey, leased);
+        wallet->pLeasingManager->GetAllAmountsLeasedTo(pubKey, leased);
         amount += leased;
     }
     return amount;
