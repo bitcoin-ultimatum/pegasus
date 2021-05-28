@@ -766,11 +766,12 @@ void MasterNodesWidget::onDeleteMNClicked(){
         int lineNumToRemove = -1;
         int linenumber = 1;
         std::string lineCopy = "";
+        std::string txHash, outputIndex;
         for (std::string line; std::getline(streamConfig, line); linenumber++) {
             if (line.empty()) continue;
 
             std::istringstream iss(line);
-            std::string comment, alias, ip, privKey, txHash, outputIndex;
+            std::string comment, alias, ip, privKey;
 
             if (iss >> comment) {
                 if (comment.at(0) == '#') continue;
@@ -821,6 +822,10 @@ void MasterNodesWidget::onDeleteMNClicked(){
             updateListState();
 
             inform("Masternode deleted successfully!");
+
+            COutPoint outpoint = COutPoint(uint256(txHash), (unsigned int) std::stoul(outputIndex.c_str()));
+            pwalletMain->UnlockCoin(outpoint);
+
             removeMNLine();
         }
         else
