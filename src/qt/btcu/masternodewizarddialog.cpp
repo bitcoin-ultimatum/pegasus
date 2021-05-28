@@ -10,6 +10,7 @@
 #include "pairresult.h"
 #include "activemasternode.h"
 #include "qt/btcu/guitransactionsutils.h"
+#include "obfuscation.h"
 #include <QFile>
 #include <QIntValidator>
 #include <QHostAddress>
@@ -281,6 +282,8 @@ bool MasterNodeWizardDialog::createMN(){
         WalletModelTransaction currentTransaction(recipients);
         WalletModel::SendCoinsReturn prepareStatus;
 
+        currentTransaction.getRecipients()[0].inputType = AvailableCoinsType::ONLY_1000;
+
         prepareStatus = walletModel->prepareTransaction(currentTransaction);
 
         QString returnMsg = "Unknown error";
@@ -415,6 +418,10 @@ bool MasterNodeWizardDialog::createMN(){
                 mnEntry = masternodeConfig.add(alias, ipAddress+":"+port, mnKeyString, txID, indexOutStr);
 
                 returnStr = tr("Master node created!");
+
+                COutPoint outpoint = COutPoint(walletTx->GetHash(), (unsigned int) std::stoul(indexOutStr.c_str()));
+                pwalletMain->LockCoin(outpoint);
+
                 return true;
             } else{
                 returnStr = tr("masternode.conf file doesn't exists");
