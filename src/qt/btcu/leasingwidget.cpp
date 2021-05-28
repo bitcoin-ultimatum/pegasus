@@ -911,7 +911,7 @@ void LeasingWidget::onSendClicked(){
            //onTempADD();
         }
     }
-
+    ui->lineEditOwnerAddress->clear();
     dialog->deleteLater();
 }
 
