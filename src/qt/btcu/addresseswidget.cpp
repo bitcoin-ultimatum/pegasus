@@ -250,8 +250,9 @@ void AddressesWidget::onStoreContactClicked(){
                ui->labelListName->setVisible(true);
                ui->labelListAddress->setVisible(true);
             }
-           updateAddresses();
+
             informWarning(tr("New Contact Stored"));
+            updateAddresses();
         } else {
             informError(tr("Error Storing Contact"));
         }
