@@ -648,24 +648,36 @@ bool AddressTableModel::isWhitelisted(const std::string& address) const
  * @return
  */
 QString AddressTableModel::getAddressToShow() const{
-    QString addressStr;
+    QString addressStr = "";
+
     LOCK(wallet->cs_wallet);
     if(!wallet->mapAddressBook.empty()) {
-        for (auto it = wallet->mapAddressBook.rbegin(); it != wallet->mapAddressBook.rend(); ++it ) {
-            if (it->second.purpose == AddressBook::AddressBookPurpose::RECEIVE) {
-                const CBTCUAddress &address = it->first;
-                if (address.IsValid() && IsMine(*wallet, address.Get()) && it->second.name == "Default") {
-                    addressStr = QString::fromStdString(address.ToString());
+
+        QString tempAddress = "";
+        uint creationTime = 0;
+
+        for (auto ptr: priv->cachedAddressTable) {
+            if (ptr.type == AddressTableEntry::Type::Receiving) {
+                const CBTCUAddress address(ptr.address.toStdString());
+                if (address.IsValid() && IsMine(*wallet, address.Get()) &&
+                    (ptr.creationTime < creationTime || tempAddress == "")) {
+                    tempAddress = ptr.address;
+                    creationTime = ptr.creationTime;
                 }
             }
         }
-    } else {
+        addressStr = tempAddress;
+    }
+
+    if(addressStr == "")
+    {
         // For some reason we don't have any address in our address book, let's create one
         CBTCUAddress newAddress;
         if (walletModel->getNewAddress(newAddress, "Default").result) {
             addressStr = QString::fromStdString(newAddress.ToString());
         }
     }
+
     return addressStr;
 }
 

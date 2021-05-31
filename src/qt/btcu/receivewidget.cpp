@@ -120,8 +120,8 @@ void ReceiveWidget::loadWalletModel(){
 
 void ReceiveWidget::refreshView(QString refreshAddress){
     try {
-        QString latestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getAddressToShow() : refreshAddress;
-        if (latestAddress.isEmpty()) { // new default address
+        QString oldestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getAddressToShow() : refreshAddress;
+        if (oldestAddress.isEmpty()) { // new default address
             CBTCUAddress newAddress;
             PairResult r = walletModel->getNewAddress(newAddress, "Default");
             // Check for generation errors
@@ -130,12 +130,12 @@ void ReceiveWidget::refreshView(QString refreshAddress){
                 informError(tr("Error generating address"));
                 return;
             }
-            latestAddress = QString::fromStdString(newAddress.ToString());
+            oldestAddress = QString::fromStdString(newAddress.ToString());
         }
-        ui->labelAddress->setText(latestAddress);
-        int64_t time = walletModel->getKeyCreationTime(CBTCUAddress(latestAddress.toStdString()));
+        ui->labelAddress->setText(oldestAddress);
+        int64_t time = walletModel->getKeyCreationTime(CBTCUAddress(oldestAddress.toStdString()));
         ui->labelDate->setText(GUIUtil::dateTimeStr(QDateTime::fromTime_t(static_cast<uint>(time))));
-        updateQr(latestAddress);
+        updateQr(oldestAddress);
         updateLabel();
     } catch (const std::runtime_error& error){
         ui->labelQrImg->setText(tr("No available address, try unlocking the wallet"));
@@ -210,7 +210,9 @@ void ReceiveWidget::onNewAddressClicked(){
     try {
         if (!verifyWalletUnlocked()) return;
         CBTCUAddress address;
-        PairResult r = walletModel->getNewAddress(address, "");
+        QString label = addressTableModel->labelForAddress(info->address);
+        CBTCUAddress oldAddress(addressTableModel->getAddressToShow().toStdString());
+        PairResult r = walletModel->getNewAddress(address, label.toStdString());
 
         // Check for validity
         if(!r.result) {
@@ -220,6 +222,10 @@ void ReceiveWidget::onNewAddressClicked(){
 
         updateQr(QString::fromStdString(address.ToString()));
         ui->labelAddress->setText(!info->address.isEmpty() ? info->address : tr("No address"));
+
+        CTxDestination old = oldAddress.Get();
+        pwalletMain->DelAddressBook(old);
+
         updateLabel();
         informWarning(tr("New address created"));
     } catch (const std::runtime_error& error){
