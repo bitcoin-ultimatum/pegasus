@@ -61,8 +61,8 @@ CreateContract::CreateContract(BTCUGUI *parent) :
     ui->lineEditGasPrice->setPlaceholderText(tr("Enter gas price"));
 
     /*Button*/
-    ui->pbnClearAll->setProperty("cssClass","btn-secundary-small");
-    ui->pbnCreateContract->setProperty("cssClass","btn-secundary-small");
+    setCssBtnSecondary(ui->pbnCreateContract);
+    setCssBtnPrimary(ui->pbnClearAll);
 
     /*Checkbox*/
     //ui->checkBoxBroadcast;
