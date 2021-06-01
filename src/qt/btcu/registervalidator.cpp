@@ -75,6 +75,12 @@ void RegisterValidator::load(WalletModel* walletModel, PWidget* widget)
 }
 
 void RegisterValidator::onBoxClicked() {
+    if(contactsSize == 0)
+    {
+        inform(tr("No masternodes available, you can go to the masternode tab and create some there!"));
+        return;
+    }
+
     if(widgetBox->isVisible()){
         widgetBox->hide();
         btnBox->setIcon(getIconComboBox(isLightTheme(),false));
@@ -84,7 +90,7 @@ void RegisterValidator::onBoxClicked() {
 
     QPoint pos = ui->lineEditMNName->pos();
 
-    int height = contactsSize == 1 ? 70 : contactsSize == 2 ? 100 : 150;
+    int height = contactsSize == 1 ? 70 : contactsSize == 2 ? 100 : 130;
     widgetBox->setFixedSize(ui->lineEditMNName->width() + 20, height);
     pos.setY(this->height()/2 + ui->lineEditMNName->height() + 1);
     pos.setX(this->width()/2 - ui->lineEditMNName->width()/2 - 13);
@@ -115,8 +121,8 @@ void RegisterValidator::fillComboBox()
         MNs.push_back(node);
 
         QString text = label + " : " + address;
-        if(text.length() > 40)
-            text = text.left(37) + "...";
+        if(text.length() > 38)
+            text = text.left(35) + "...";
         ui->comboBox->addItem(text);
     }
     std::string strConfFile = "masternode.conf";

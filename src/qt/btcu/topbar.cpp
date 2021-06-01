@@ -64,21 +64,19 @@ TopBar::TopBar(BTCUGUI* _mainWindow, QWidget *parent) :
     //setCssProperty({ui->labelAmountPiv/*, ui->labelAmountzPiv*/}, "amount-topbar");
     setCssProperty({ui->labelAmountPiv}, "amount-small-topbar");
 
+    //ui->lineEditTocens->setPlaceholderText(tr("My tocens"));
+    ui->lineEditTocens->setGraphicsEffect(nullptr);
+    ui->lineEditTocens->setText(tr("My Tokens"));
+    btnOwnerTocen = ui->lineEditTocens->addAction(getIconComboBox(isLightTheme(), false), QLineEdit::TrailingPosition);
+    ui->lineEditTocens->installEventFilter(this);
 
+    setCssProperty(ui->lineEditTocens, "edit-primary-multi-book");
+    //ui->lineEditOwnerAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    setShadow(ui->lineEditTocens);
+    connect(btnOwnerTocen, &QAction::triggered, [this](){ onTocensClicked(); });
+    ui->lineEditTocens->setReadOnly(true);
 
-
-   //ui->lineEditTocens->setPlaceholderText(tr("My tocens"));
-   ui->lineEditTocens->setGraphicsEffect(nullptr);
-   ui->lineEditTocens->setText(tr("My Tokens"));
-   btnOwnerTocen = ui->lineEditTocens->addAction(getIconComboBox(isLightTheme(), false), QLineEdit::TrailingPosition);
-   ui->lineEditTocens->installEventFilter(this);
-
-   setCssProperty(ui->lineEditTocens, "edit-primary-multi-book");
-   //ui->lineEditOwnerAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
-   setShadow(ui->lineEditTocens);
-   connect(btnOwnerTocen, &QAction::triggered, [this](){ onTocensClicked(); });
-   ui->lineEditTocens->setReadOnly(true);
-   // Progress Sync
+    // Progress Sync
     progressBar = new QProgressBar(ui->layoutSync);
     progressBar->setRange(1, 10);
     progressBar->setValue(4);
@@ -103,11 +101,11 @@ TopBar::TopBar(BTCUGUI* _mainWindow, QWidget *parent) :
 
     ui->pushButtonColdStaking->setButtonClassStyle("cssClass", "btn-check-cold-staking-inactive");
     ui->pushButtonColdStaking->setButtonText(tr("Cold Staking Disabled"));
-    ui->pushButtonColdStaking->setVisible(false);
+    //ui->pushButtonColdStaking->setVisible(false);
 
     ui->pushButtonLeasing->setButtonClassStyle("cssClass", "btn-check-leasing-inactive");
     ui->pushButtonLeasing->setButtonText(tr("Leasing Disabled"));
-   ui->pushButtonLeasing->setVisible(false);
+    ui->pushButtonLeasing->setVisible(false);
 
     ui->pushButtonSync->setButtonClassStyle("cssClass", "btn-check-sync");
     ui->pushButtonSync->setButtonText(tr(" %54 Synchronizing.."));
@@ -121,7 +119,7 @@ TopBar::TopBar(BTCUGUI* _mainWindow, QWidget *parent) :
         ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-dark");
         ui->pushButtonTheme->setButtonText(tr("Dark Theme"));
     }
-   //ui->pushButtonTheme->setVisible(false);
+    //ui->pushButtonTheme->setVisible(false);
 
     //setCssProperty(ui->qrContainer, "container-qr");
     //setCssProperty(ui->pushButtonQR, "btn-qr");
