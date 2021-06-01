@@ -101,7 +101,7 @@ TopBar::TopBar(BTCUGUI* _mainWindow, QWidget *parent) :
 
     ui->pushButtonColdStaking->setButtonClassStyle("cssClass", "btn-check-cold-staking-inactive");
     ui->pushButtonColdStaking->setButtonText(tr("Cold Staking Disabled"));
-    //ui->pushButtonColdStaking->setVisible(false);
+    ui->pushButtonColdStaking->setVisible(false);
 
     ui->pushButtonLeasing->setButtonClassStyle("cssClass", "btn-check-leasing-inactive");
     ui->pushButtonLeasing->setButtonText(tr("Leasing Disabled"));
