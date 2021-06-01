@@ -150,32 +150,14 @@ void ValidatorWidget::onpbnValidatorClicked()
         informError(tr("Wallet model does not load."));
         return;
     }
-   RegisterValidator* newValidator = new RegisterValidator(walletModel,this);
-   //newValidator->setTableModel(walletModel);
-   connect(newValidator, SIGNAL(registered(std::string, std::string, std::string)), this, SLOT(onRegisterValidator(std::string, std::string, std::string)));
-   newValidator->setWalletModel(walletModel);
-   showHideOp(true);
-   newValidator->show();
-   //openDialogWithOpaqueBackground(newValidator, window);
-   //window->goToCreateValidator();
+    showHideOp(true);
 
-   //open widget with opaque background
-    newValidator->setWindowFlags(Qt::CustomizeWindowHint);
-    newValidator->setAttribute(Qt::WA_TranslucentBackground, true);
-
-    newValidator->activateWindow();
-    newValidator->resize(window->width(),window->height());
-
-    QPropertyAnimation* animation = new QPropertyAnimation(newValidator, "pos");
-    animation->setDuration(300);
-    int xPos = 0;
-    animation->setStartValue(QPoint(xPos, window->height()));
-    animation->setEndValue(QPoint(xPos, 0));
-    animation->setEasingCurve(QEasingCurve::OutQuad);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
-    newValidator->activateWindow();
-    newValidator->show();
-    window->showHide(false);
+    RegisterValidator* newValidator = new RegisterValidator(window);
+    newValidator->load(walletModel, this);
+    connect(newValidator, SIGNAL(registered(std::string, std::string, std::string)), this, SLOT(onRegisterValidator(std::string, std::string, std::string)));
+    newValidator->adjustSize();
+    showDialog(newValidator, 0, 0);
+    newValidator->deleteLater();
 }
 
 void ValidatorWidget::onpbnRegisteredClicked()

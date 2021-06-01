@@ -11,18 +11,14 @@
 #include <QRegExpValidator>
 #include "../rpc/server.h"
 
-RegisterValidator::RegisterValidator( WalletModel* walletModel, PWidget *parent) :
-    PWidget(parent),
+RegisterValidator::RegisterValidator(QWidget *parent) :
+    QDialog(parent),
     ui(new Ui::RegisterValidator)
 {
+    window = parent;
+
     ui->setupUi(this);
-
-    addressTableModel = walletModel->getAddressTableModel();
-    filter = new AddressFilterProxyModel(QString(AddressTableModel::Receive), this);
-    filter->setSourceModel(addressTableModel);
-
     this->setStyleSheet(parent->styleSheet());
-
     ui->frame->setProperty("cssClass", "container-border");
 
     //Buttons
@@ -38,32 +34,20 @@ RegisterValidator::RegisterValidator( WalletModel* walletModel, PWidget *parent)
     ui->labelMasternode->setProperty("cssClass", "text-leasing-dialog");
 
     //Line edit
-    /*ui->lineEditMasternode->setPlaceholderText(tr("Masternode Name"));
-    setShadow(ui->lineEditMasternode);
-    //ui->lineEditMasternode->setProperty("cssClass", "edit-leasing-dialog");
-    btnMasternodeContact = ui->lineEditMasternode->addAction(getIconComboBox(isLightTheme(), false), QLineEdit::TrailingPosition);
-    setCssProperty(ui->lineEditMasternode, "edit-primary-multi-book");
-    ui->lineEditMasternode->setAttribute(Qt::WA_MacShowFocusRect, 0);
-    connect(btnMasternodeContact, &QAction::triggered, [this](){ onLineEditClicked(true); });
-    //ui->lineEditBTCU->setPlaceholderText(tr("0"));
-    //ui->lineEditBTCU->setProperty("cssClass","edit-primary-BTCU");
-    btnUpMasternodeContact = ui->lineEditMasternode->addAction(getIconComboBox(isLightTheme(),true), QLineEdit::TrailingPosition);
-    connect(btnUpMasternodeContact, &QAction::triggered, [this](){ onLineEditClicked(true); });
-    ui->lineEditMasternode->removeAction(btnUpMasternodeContact);*/
+    ui->lineEditMNName->setPlaceholderText("Masternode name");
+    setCssProperty(ui->lineEditMNName, "edit-primary-multi-book");
+    ui->lineEditMNName->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    ui->lineEditMNName->setReadOnly(true);
 
     //ComboBox
-    setCssProperty(ui->lineEditMNName, "edit-primary-multi-book");
     btnBox = ui->lineEditMNName->addAction(getIconComboBox(isLightTheme(),false), QLineEdit::TrailingPosition);
     connect(btnBox, &QAction::triggered, [this](){ onBoxClicked(); });
     SortEdit* lineEdit = new SortEdit(ui->comboBox);
     initComboBox(ui->comboBox, lineEdit);
     connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBox->showPopup();});
-    ui->lineEditMNName->setReadOnly(true);
-
-    fillComboBox();
-
     ui->comboBox->setVisible(false);
-    ui->lineEditMNName->setText(ui->comboBox->currentText());
+
+    //Widget
     widgetBox = new QWidget(this);
     QVBoxLayout* LayoutBox = new QVBoxLayout(widgetBox);
     listViewComboBox = new QListView();
@@ -80,91 +64,14 @@ RegisterValidator::~RegisterValidator()
     delete ui;
 }
 
-void RegisterValidator::setTableModel(WalletModel *walletModel)
+void RegisterValidator::load(WalletModel* walletModel, PWidget* widget)
 {
     addressTableModel = walletModel->getAddressTableModel();
-    filter = new AddressFilterProxyModel(QString(AddressTableModel::Receive), this);
+    filter = new AddressFilterProxyModel(QString(AddressTableModel::Leasing), this);
     filter->setSourceModel(addressTableModel);
-}
+    contactsSize = walletModel->getAddressTableModel()->sizeLeasing();
 
-void RegisterValidator::registerValidator(){
-    std::string name = "";
-    std::string hash = "";
-
-    std::string strConfFile = "masternode.conf";
-    std::string strDataDir = GetDataDir().string();
-    if (strConfFile != boost::filesystem::basename(strConfFile) + boost::filesystem::extension(strConfFile)){
-        //throw std::runtime_error(strprintf(_("masternode.conf %s resides outside data directory %s"), strConfFile, strDataDir));
-    }
-
-    boost::filesystem::path pathBootstrap = GetDataDir() / strConfFile;
-    if (boost::filesystem::exists(pathBootstrap)) {
-        boost::filesystem::path pathMasternodeConfigFile = GetMasternodeConfigFile();
-        boost::filesystem::ifstream streamConfig(pathMasternodeConfigFile);
-
-        if (streamConfig.good()) {
-
-            int linenumber = 1;
-            for (std::string line; std::getline(streamConfig, line); linenumber++) {
-                if (line.empty()) continue;
-                if (line.at(0) == '#') continue;
-
-                std::string buffLine = "";
-                int count = 0;
-                for (int i = 0; i < line.size(); ++i) {
-                    if (line.at(i) == ' ') {
-                        if (count == 0) {
-                            name = buffLine;
-                        } else if (count == 3) {
-                            hash = buffLine;
-                        }
-                        buffLine = "";
-                        ++count;
-                    } else {
-                        buffLine += line.at(i);
-                    }
-                }
-
-                uint256 uHash = uint256(hash);
-                uint256 uBlock;
-                CTransaction tr;
-                int blockHeight = -1;
-                CBlockIndex *cbIndex = nullptr;
-
-                //GetTransaction(uHash, tr, uBlock, true);
-                //IsTransactionInChain(uHash, blockHeight, tr);
-
-                /*CKeyID key;
-                walletModel->getKeyId(CBTCUAddress(walletModel->getAddressTableModel()->getAddressToShow().toStdString()), key);
-                CPubKey pubKey;
-                walletModel->getPubKey(key, pubKey);
-
-                QString type = "-";
-                UniValue uniValue;
-                uniValue = mnvalidatorlist(uniValue, true);
-                std::string keys = uniValue.get_str();
-                //if(CPubKey(keys) == pubKey)
-                //    type = "Validator";
-                //else
-                type = "Master";
-                CTxOut out;
-                CAmount leasingAmount;
-                //pleasingManagerMain->GetAllAmountsLeasedTo(pubKey, leasingAmount);
-
-                for(auto i : tr.GetOutPoints())
-                {
-                    //out = pleasingManagerMain->CalcLeasingReward(i, pubKey.GetID());
-                    //LeaserType t = static_cast<LeaserType>(i.n);
-                    //if(t == LeaserType::MasterNode)
-                    //     type =  "Masternode";
-                    //else if(t == LeaserType::ValidatorNode)
-                    //    type = "Validator";
-                    //else
-                    //    type = "-";
-                }*/
-            }
-        }
-    }
+    fillComboBox();
 }
 
 void RegisterValidator::onBoxClicked() {
@@ -174,12 +81,13 @@ void RegisterValidator::onBoxClicked() {
         return;
     }
     btnBox->setIcon(getIconComboBox(isLightTheme(),true));
-    QPoint pos = ui->lineEditMNName->pos();
-    QPoint point = ui->lineEditMNName->rect().bottomRight();
 
-    widgetBox->setFixedSize(ui->lineEditMNName->width() + 20,(ui->comboBox->count()*50));
-    pos.setY(window->height()/2 + point.y());
-    pos.setX(window->width()/2 - point.x()/2 - 13);
+    QPoint pos = ui->lineEditMNName->pos();
+
+    int height = contactsSize == 1 ? 70 : contactsSize == 2 ? 100 : 150;
+    widgetBox->setFixedSize(ui->lineEditMNName->width() + 20, height);
+    pos.setY(this->height()/2 + ui->lineEditMNName->height() + 1);
+    pos.setX(this->width()/2 - ui->lineEditMNName->width()/2 - 13);
     widgetBox->move(pos);
     widgetBox->show();
 }
@@ -190,19 +98,29 @@ void RegisterValidator::onComboBox(const QModelIndex &index) {
     ui->comboBox->setCurrentIndex(index.row());
     widgetBox->hide();
 }
-
-void RegisterValidator::onLineEditClicked(bool ownerAdd) {
-    isConcatMasternodeSelected = ownerAdd;
-    concats();
-}
-
 void RegisterValidator::fillComboBox()
 {
-    ui->comboBox->addItem("Masternode name");
+    int rowCount = filter->rowCount();
+    for(int addressNumber = 0; addressNumber < rowCount; addressNumber++)
+    {
+        QModelIndex rowIndex = filter->index(addressNumber, AddressTableModel::Address);
+        QModelIndex sibling = rowIndex.sibling(addressNumber, AddressTableModel::Label);
+        QString label = sibling.data(Qt::DisplayRole).toString();
+        sibling = rowIndex.sibling(addressNumber, AddressTableModel::Address);
+        QString address = sibling.data(Qt::DisplayRole).toString();
 
+        masterNode node;
+        node.address = address.toStdString();
+        node.name = label.toStdString();
+        MNs.push_back(node);
+
+        QString text = label + " : " + address;
+        if(text.length() > 40)
+            text = text.left(37) + "...";
+        ui->comboBox->addItem(text);
+    }
     std::string strConfFile = "masternode.conf";
     std::string strDataDir = GetDataDir().string();
-
     if (strConfFile != boost::filesystem::basename(strConfFile) + boost::filesystem::extension(strConfFile)){
         throw std::runtime_error(strprintf(_("masternode.conf %s resides outside data directory %s"), strConfFile, strDataDir));
     }
@@ -213,7 +131,6 @@ void RegisterValidator::fillComboBox()
         boost::filesystem::ifstream streamConfig(pathMasternodeConfigFile);
 
         if (streamConfig.good()) {
-
             int linenumber = 1;
             for (std::string line; std::getline(streamConfig, line); linenumber++) {
                 if (line.empty()) continue;
@@ -221,123 +138,43 @@ void RegisterValidator::fillComboBox()
 
                 std::string name = "";
                 std::string hash = "";
-                std::string address = "";
 
                 std::string buffLine = "";
                 int count = 0;
                 for (int i = 0; i < line.size(); ++i) {
-                    if (line.at(i) == ' ')
-                    {
-                        if(count == 3) break;
+                    if (line.at(i) == ' ') {
+                        if (count == 3) break;
                         count++;
-                    }
-                    else if(count == 0) name += line.at(i);
-                    else if(count == 3) hash += line.at(i);
+                    } else if (count == 0) name += line.at(i);
+                    else if (count == 3) hash += line.at(i);
                 }
 
-                int rowCount = filter->rowCount();
-                for(int addressNumber = 0; addressNumber < rowCount; addressNumber++)
-                {
-                    QModelIndex rowIndex = filter->index(addressNumber, AddressTableModel::Address);
-                    QModelIndex sibling = rowIndex.sibling(addressNumber, AddressTableModel::Label);
-                    QString label = sibling.data(Qt::DisplayRole).toString();
-                    if(label.toStdString() == name)
-                    {
-                        sibling = rowIndex.sibling(addressNumber, AddressTableModel::Address);
-                        address = sibling.data(Qt::DisplayRole).toString().toStdString();
-                        break;
-                    }
-                }
-
-                if(address == "") continue;
-                MNs.push_back({name, address, hash});
-                QString text = QString::fromStdString(name) + ":" + QString::fromStdString(address);
-
-                if(text.length() > 40)
-                    text = text.left(37) + "...";
-
-                ui->comboBox->addItem(text);
+                auto ptr = std::find_if(MNs.begin(), MNs.end(), [&name](const masterNode& node){return node.name == name;});
+                if(ptr != MNs.end())
+                    ptr->hash = hash;
             }
         }
     }
 }
 
-void RegisterValidator::concats()
-{
-    /*
-    int masternodeSize = walletModel->getAddressTableModel()->sizeRecv();
-
-    int height;
-    int width;
-    QPoint pos;
-
-    height = ui->lineEditMasternode->height();
-    width = ui->lineEditMasternode->width();
-    pos = ui->lineEditMasternode->rect().bottomLeft();
-    pos.setY((pos.y() + (height +4) * 2.4));
-
-    pos.setX(pos.x() + 30);
-    height = 45;
-    height = (masternodeSize < 4) ? height * masternodeSize + 25 : height * 4 + 25;
-
-    if(!menuMasternodes)
-    {
-        menuMasternodes = new ContactsDropdown(width, height, this);
-
-        menuMasternodes->setGraphicsEffect(0);
-
-        connect(menuMasternodes, &ContactsDropdown::contactSelected, [this](QString address, QString label){ //???
-            if (isConcatMasternodeSelected) {
-                ui->lineEditMasternode->setText(label);
-                currentMN = address;
-            } else {
-                //SendMultiRow
-            }
-            ui->lineEditMasternode->removeAction(btnUpMasternodeContact);
-            ui->lineEditMasternode->addAction(btnMasternodeContact, QLineEdit::TrailingPosition);
-        });
-    }
-    
-    if(menuMasternodes->isVisible()){
-        menuMasternodes->hide();
-        ui->lineEditMasternode->removeAction(btnUpMasternodeContact);
-        ui->lineEditMasternode->addAction(btnMasternodeContact, QLineEdit::TrailingPosition);
-        return;
-    }
-
-    ui->lineEditMasternode->removeAction(btnMasternodeContact);
-    ui->lineEditMasternode->addAction(btnUpMasternodeContact, QLineEdit::TrailingPosition);
-    menuMasternodes->setWalletModel(walletModel, isConcatMasternodeSelected ? AddressTableModel::Receive : AddressTableModel::LeasingSend);
-    menuMasternodes->resizeList(width, height);
-    menuMasternodes->setStyleSheet(styleSheet());
-    menuMasternodes->adjustSize();
-    menuMasternodes->move(pos);
-    menuMasternodes->show();
-     */
-}
-
 void RegisterValidator::onRegister()
 {
-    if(ui->comboBox->currentIndex() == 0)
+    if(ui->lineEditMNName->text().isEmpty())
     {
         setCssEditLine(ui->lineEditMNName, false, true);
         return;
     }
 
-    /*QString name = "";
-    for(int i = 0 ; i < ui->comboBox->currentText().size(); ++i)
-    {
-        if(ui->comboBox->currentText().at(i) == ":")
-            break;
-        name += ui->comboBox->currentText().at(i);
-    }*/
     this->hide();
-    masterNode mn = MNs[ui->comboBox->currentIndex()-1];
+    masterNode mn = MNs[ui->comboBox->currentIndex()];
     Q_EMIT registered(mn.name, mn.address, mn.hash);
     this->close();
 }
 
-void RegisterValidator::changeTheme(bool isLightTheme, QString &theme)
-{
-    btnBox->setIcon(getIconComboBox(isLightTheme, widgetBox->isVisible()));
+void RegisterValidator::inform(QString text){
+    if (!snackBar)
+        snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(text);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
 }

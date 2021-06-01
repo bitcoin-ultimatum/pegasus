@@ -11,7 +11,7 @@
 #include <QDialog>
 #include <QComboBox>
 #include <QListView>
-#include "qt/btcu/contactsdropdown.h"
+#include "qt/btcu/snackbar.h"
 #include "qt/btcu/pwidget.h"
 #include "walletmodel.h"
 #include "addresstablemodel.h"
@@ -28,20 +28,17 @@ namespace Ui {
 class RegisterValidator;
 }
 
-class RegisterValidator : public PWidget
+class RegisterValidator : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit RegisterValidator( WalletModel* walletModel, PWidget *parent = nullptr);
+    explicit RegisterValidator(QWidget *parent = nullptr);
     ~RegisterValidator();
 
-    void registerValidator();
-    void setTableModel(WalletModel* walletModel);
+    void load(WalletModel* walletModel, PWidget* widget);
 
 private Q_SLOTS:
-    void changeTheme(bool isLightTheme, QString& theme) override;
-    void onLineEditClicked(bool ownerAdd);
     void onComboBox(const QModelIndex &index);
     void onBoxClicked();
     void onRegister();
@@ -50,14 +47,15 @@ Q_SIGNALS:
     void registered(std::string MNName, std::string address, std::string hash);
 
 private:
-    void concats();
     void fillComboBox();
+    void inform(QString text);
 
 private:
     Ui::RegisterValidator *ui;
-
+    QWidget* window;
     QVector<masterNode> MNs;
 
+    SnackBar *snackBar = nullptr;
     QAction *btnBox = nullptr;
     QListView *listViewComboBox = nullptr;
     QWidget * widgetBox = nullptr;
@@ -65,11 +63,7 @@ private:
     AddressFilterProxyModel *filter = nullptr;
 
     bool isConcatMasternodeSelected;
-
-    QString currentMN;
-    ContactsDropdown *menuMasternodes = nullptr;
-    QAction *btnMasternodeContact = nullptr;
-    QAction *btnUpMasternodeContact = nullptr;
+    int contactsSize;
 };
 
 #endif // REGISTERVALIDATOR_H
