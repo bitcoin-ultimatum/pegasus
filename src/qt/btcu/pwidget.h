@@ -51,7 +51,7 @@ public:
 Q_SIGNALS:
     void message(const QString& title, const QString& body, unsigned int style, bool* ret = nullptr);
     void showHide(bool show);
-    bool execDialog(QDialog *dialog, int xDiv = 3, int yDiv = 5);
+    bool execDialog(QDialog *dialog, double xDiv = 3, double yDiv = 5);
 
 protected Q_SLOTS:
     virtual void changeTheme(bool isLightTheme, QString &theme);
@@ -69,7 +69,7 @@ protected:
     bool execute(int type);
     void warn(const QString& title, const QString& message);
     bool ask(const QString& title, const QString& message);
-    void showDialog(QDialog *dialog, int xDiv = 3, int yDiv = 5);
+    void showDialog(QDialog *dialog, double xDiv = 3, double yDiv = 5);
 
     bool verifyWalletUnlocked();
 

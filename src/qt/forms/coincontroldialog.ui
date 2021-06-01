@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>650</height>
+    <height>670</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -23,21 +23,6 @@
    <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QFrame" name="frameContainer">
      <property name="toolTipDuration">
@@ -200,6 +185,22 @@ padding-right:4px;</string>
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="labelDivider1">
+          <property name="maximumSize">
+           <size>
+            <width>1</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color:#bababa;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -259,6 +260,22 @@ padding-right:4px;</string>
             </widget>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelDivider2">
+          <property name="maximumSize">
+           <size>
+            <width>1</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color:#bababa;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
         <item>
@@ -330,7 +347,7 @@ padding-right:4px;</string>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>60</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -361,7 +378,7 @@ padding-right:4px;</string>
           <number>0</number>
          </property>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0,0,0">
+          <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0,0,0,0,0">
            <property name="spacing">
             <number>20</number>
            </property>
@@ -376,7 +393,7 @@ padding-right:4px;</string>
              <property name="minimumSize">
               <size>
                <width>160</width>
-               <height>40</height>
+               <height>50</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -429,7 +446,7 @@ padding-right:4px;</string>
              <property name="minimumSize">
               <size>
                <width>160</width>
-               <height>40</height>
+               <height>50</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -468,6 +485,42 @@ padding-right:4px;</string>
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QRadioButton" name="radioTreeMode">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Tree mode</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioListMode">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>List mode</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelLocked">
+             <property name="text">
+              <string>(1 locked)</string>
+             </property>
+            </widget>
+           </item>
            <item alignment="Qt::AlignRight">
             <widget class="QGroupBox" name="groupBox_2">
              <property name="styleSheet">
@@ -479,44 +532,7 @@ padding-right:4px;</string>
              <property name="title">
               <string/>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_14">
-              <item>
-               <widget class="QRadioButton" name="radioTreeMode">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Tree mode</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioListMode">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>List mode</string>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelLocked">
-             <property name="text">
-              <string>(1 locked)</string>
-             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_14"/>
             </widget>
            </item>
           </layout>
@@ -592,7 +608,7 @@ padding-right:4px;</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="spacing">
-         <number>20</number>
+         <number>10</number>
         </property>
         <property name="leftMargin">
          <number>20</number>
@@ -647,6 +663,22 @@ padding-right:4px;</string>
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="labelDivider3">
+          <property name="maximumSize">
+           <size>
+            <width>1</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color:#bababa;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QWidget" name="layoutDust" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,0">
            <item>
@@ -693,6 +725,22 @@ padding-right:4px;</string>
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="labelDivider4">
+          <property name="maximumSize">
+           <size>
+            <width>1</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color:#bababa;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QWidget" name="layoutChange" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1,0">
            <item>
@@ -736,6 +784,22 @@ padding-right:4px;</string>
             </widget>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelDivider5">
+          <property name="maximumSize">
+           <size>
+            <width>1</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color:#bababa;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
         <item>
@@ -815,7 +879,7 @@ padding-right:4px;</string>
           <property name="minimumSize">
            <size>
             <width>150</width>
-            <height>35</height>
+            <height>50</height>
            </size>
           </property>
           <property name="text">

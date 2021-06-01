@@ -102,7 +102,7 @@ ColdStakingWidget::ColdStakingWidget(BTCUGUI* parent) :
     setCssSubtitleScreen(ui->labelSubtitle1);
     spacerDiv = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Expanding);
 
-    setCssProperty(ui->labelSubtitleDescription, "text-title");
+    setCssSubtitleScreen(ui->labelSubtitleDescription);
     ui->lineEditOwnerAddress->setPlaceholderText(tr("Enter owner address"));
     btnOwnerContact = ui->lineEditOwnerAddress->addAction(getIconComboBox(isLightTheme(),false), QLineEdit::TrailingPosition);
     setCssProperty(ui->lineEditOwnerAddress, "edit-primary-multi-book");
@@ -115,13 +115,13 @@ ColdStakingWidget::ColdStakingWidget(BTCUGUI* parent) :
 
     ui->pushButtonSend->setText(tr("Delegate"));
     ui->pushButtonClear->setText(tr("Clear All"));
-    setCssBtnPrimary(ui->pushButtonSend);
-    setCssBtnSecondary(ui->pushButtonClear);
+    setCssBtnSecondary(ui->pushButtonSend);
+    setCssBtnPrimary(ui->pushButtonClear);
 
     connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(clearAll()));
 
     ui->labelEditTitle->setText(tr("Cold Staking address"));
-    setCssProperty(ui->labelEditTitle, "text-title");
+    setCssSubtitleScreen(ui->labelEditTitle);
     sendMultiRow = new SendMultiRow(this);
     sendMultiRow->setOnlyStakingAddressAccepted(true);
     ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
@@ -503,19 +503,19 @@ void ColdStakingWidget::clearAll() {
 }
 
 void ColdStakingWidget::onCoinControlClicked(){
-    if(isInDelegation) {
-        if (walletModel->getBalance() > 0) {
-            if (!coinControlDialog) {
-                coinControlDialog = new CoinControlDialog();
-                coinControlDialog->setModel(walletModel);
-            } else {
-                coinControlDialog->refreshDialog();
-            }
-            coinControlDialog->exec();
-            ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
-        } else {
-            inform(tr("You don't have any BTCU to select."));
-        }
+    if(!isInDelegation) return;
+    if (walletModel->getBalance() > 0) {
+        showHideOp(true);
+
+        CoinControlDialog* dialog = new CoinControlDialog(window);
+        dialog->setModel(walletModel);
+        dialog->adjustSize();
+        showDialog(dialog, 4.5, 5.5);
+        ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
+
+        dialog->deleteLater();
+    } else {
+        inform(tr("You don't have any BTCU to select."));
     }
 }
 

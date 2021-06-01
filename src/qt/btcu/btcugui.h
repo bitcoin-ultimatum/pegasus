@@ -106,7 +106,7 @@ public Q_SLOTS:
     void message(const QString& title, const QString& message, unsigned int style, bool* ret = nullptr);
     void messageInfo(const QString& message);
     void messageInfo(const QString& message, int Type);
-    bool execDialog(QDialog *dialog, int xDiv = 3, int yDiv = 5);
+    bool execDialog(QDialog *dialog, double xDiv = 3, double yDiv = 5);
     /** Open FAQ dialog **/
     void openFAQ(int section = 0);
 

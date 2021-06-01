@@ -47,58 +47,42 @@ bool CCoinControlWidgetItem::operator<(const QTreeWidgetItem &other) const {
 }
 
 
-CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
-                                                        ui(new Ui::CoinControlDialog),
-                                                        model(0)
+CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) :
+    QDialog(parent), ui(new Ui::CoinControlDialog), model(0)
 {
     ui->setupUi(this);
 
     /* Open CSS when configured */
-    this->setStyleSheet(GUIUtil::loadStyleSheet());
+    this->setStyleSheet(parent->styleSheet());
+    setCssProperty(ui->frameContainer, "container-border");
+    ui->frameContainer->setContentsMargins(10,10,10,10);
 
-    ui->frameContainer->setProperty("cssClass", "container-dialog");
-    ui->layoutAmount->setProperty("cssClass", "container-border-purple");
-    ui->layoutAfter->setProperty("cssClass", "container-border-purple");
-    ui->layoutBytes->setProperty("cssClass", "container-border-purple");
-    ui->layoutChange->setProperty("cssClass", "container-border-purple");
-    ui->layoutDust->setProperty("cssClass", "container-border-purple");
-    ui->layoutFee->setProperty("cssClass", "container-border-purple");
-    ui->layoutQuantity->setProperty("cssClass", "container-border-purple");
+    setCssProperty({ui->labelDivider1, ui->labelDivider2, ui->labelDivider3, ui->labelDivider4, ui->labelDivider5}, "container-divider");
 
     // Title
-
     ui->labelTitle->setText("Select BTCU Denominations to Spend");
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
 
     // Label Style
+    QList<QWidget*> lWidjets = {ui->labelCoinControlAfterFeeText, ui->labelCoinControlAmountText, ui->labelCoinControlBytesText,
+                                ui->labelCoinControlChangeText, ui->labelCoinControlLowOutputText, ui->labelCoinControlFeeText,
+                                ui->labelCoinControlQuantityText, ui->labelCoinControlAfterFee, ui->labelCoinControlAmount,
+                                ui->labelCoinControlBytes, ui->labelCoinControlChange, ui->labelCoinControlLowOutput,
+                                ui->labelCoinControlFee, ui->labelCoinControlQuantity, ui->labelLocked};
+    for(int i = 0; i < lWidjets.size(); ++i)
+        setCssProperty(lWidjets.at(i), "text-body1-dialog-uncheck");
 
-    ui->labelCoinControlAfterFeeText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlAmountText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlBytesText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlChangeText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlLowOutputText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlFeeText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlQuantityText->setProperty("cssClass", "text-main-purple");
-
-    ui->labelCoinControlAfterFee->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlAmount->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlBytes->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlChange->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlLowOutput->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlFee->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlQuantity->setProperty("cssClass", "text-main-purple");
 
     ui->groupBox_2->setProperty("cssClass", "group-box");
     ui->treeWidget->setProperty("cssClass", "table-tree");
-    ui->labelLocked->setProperty("cssClass", "text-main-purple");
 
     // Buttons
-    ui->pushButtonSelectAll->setProperty("cssClass", "btn-check");
-    ui->pushButtonToggleLock->setProperty("cssClass", "btn-check");
+    setCssBtnPrimary(ui->pushButtonSelectAll);
+    setCssBtnPrimary(ui->pushButtonToggleLock);
 
     ui->btnEsc->setText("");
     ui->btnEsc->setProperty("cssClass", "ic-close");
-    ui->pushButtonOk->setProperty("cssClass", "btn-primary");
+    setCssBtnSecondary(ui->pushButtonOk);
 
     connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -161,25 +145,15 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
     // toggle tree/list mode
     connect(ui->radioTreeMode, SIGNAL(toggled(bool)), this, SLOT(radioTreeMode(bool)));
     connect(ui->radioListMode, SIGNAL(toggled(bool)), this, SLOT(radioListMode(bool)));
-
-    // click on checkbox
     connect(ui->treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(viewItemChanged(QTreeWidgetItem*, int)));
-
-    // click on header
-    ui->treeWidget->header()->setSectionsClickable(true);
     connect(ui->treeWidget->header(), SIGNAL(sectionClicked(int)), this, SLOT(headerSectionClicked(int)));
-
-    // ok button
     connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(accept()));
-
-    // (un)select all
     connect(ui->pushButtonSelectAll, SIGNAL(clicked()), this, SLOT(buttonSelectAllClicked()));
-
-    // Toggle lock state
     connect(ui->pushButtonToggleLock, SIGNAL(clicked()), this, SLOT(buttonToggleLockClicked()));
 
     // change coin control first column label due Qt4 bug.
     // see https://github.com/bitcoin/bitcoin/issues/5716
+    ui->treeWidget->header()->setSectionsClickable(true);
     ui->treeWidget->headerItem()->setText(COLUMN_CHECKBOX, QString());
 
     ui->treeWidget->setColumnWidth(COLUMN_CHECKBOX, 84);

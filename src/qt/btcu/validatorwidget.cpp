@@ -156,7 +156,7 @@ void ValidatorWidget::onpbnValidatorClicked()
     newValidator->load(walletModel, this);
     connect(newValidator, SIGNAL(registered(std::string, std::string, std::string)), this, SLOT(onRegisterValidator(std::string, std::string, std::string)));
     newValidator->adjustSize();
-    showDialog(newValidator, 0, 0);
+    showDialog(newValidator, 2.5, 4.5);
     newValidator->deleteLater();
 }
 

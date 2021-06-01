@@ -52,7 +52,8 @@ PrivacyWidget::PrivacyWidget(BTCUGUI* parent) :
     ui->labelSubtitle2->setText(tr("Mint new zBTCU or convert back to BTCU"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
-    setCssProperty(ui->labelSubtitleAmount, "text-title");
+
+    setCssSubtitleScreen(ui->labelSubtitleAmount);
 
     ui->lineEditAmount->setPlaceholderText("0.00 BTCU ");
     ui->lineEditAmount->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
@@ -103,7 +104,8 @@ PrivacyWidget::PrivacyWidget(BTCUGUI* parent) :
 
     // List
     ui->labelListHistory->setText(tr("Last zBTCU Movements"));
-    setCssProperty(ui->labelListHistory, "text-title");
+    setCssSubtitleScreen(ui->labelListHistory);
+    //setCssProperty(ui->labelListHistory, "text-title");
 
     //ui->emptyContainer->setVisible(false);
     setCssProperty(ui->pushImgEmpty, "img-empty-privacy");
@@ -111,7 +113,7 @@ PrivacyWidget::PrivacyWidget(BTCUGUI* parent) :
     setCssProperty(ui->labelEmpty, "text-empty");
 
     // Buttons
-    setCssBtnPrimary(ui->pushButtonSave);
+    setCssBtnSecondary(ui->pushButtonSave);
 
     // Only Convert to BTCU enabled.
     ui->containerViewPrivacyChecks->setVisible(false);

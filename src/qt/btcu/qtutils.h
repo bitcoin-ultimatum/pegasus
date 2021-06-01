@@ -36,7 +36,7 @@ bool openDialogDropRight(QDialog *widget, QWidget *gui);
 void closeDialog(QDialog *widget, BTCUGUI *gui);
 void closeDialogDropRight(QDialog *widget, BTCUGUI *gui);
 void openDialogFullScreen(QWidget *parent, QWidget * dialog);
-bool openDialogWithOpaqueBackgroundY(QDialog *widget, BTCUGUI *gui, double posX = 3, int posY = 5);
+bool openDialogWithOpaqueBackgroundY(QDialog *widget, BTCUGUI *gui, double posX = 3, double posY = 5);
 bool openDialogWithOpaqueBackground(QDialog *widget, BTCUGUI *gui, double posX);
 bool openDialogWithOpaqueBackground(QDialog *widget, BTCUGUI *gui);
 bool openDialogWithOpaqueBackgroundFullScreen(QDialog *widget, BTCUGUI *gui);

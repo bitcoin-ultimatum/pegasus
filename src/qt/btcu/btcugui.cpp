@@ -596,8 +596,8 @@ void BTCUGUI::resizeEvent(QResizeEvent* event){
     Q_EMIT windowResizeEvent(event);
 }
 
-bool BTCUGUI::execDialog(QDialog *dialog, int xDiv, int yDiv){
-    return openDialogWithOpaqueBackgroundY(dialog, this);
+bool BTCUGUI::execDialog(QDialog *dialog, double xDiv, double yDiv){
+    return openDialogWithOpaqueBackgroundY(dialog, this, xDiv, yDiv);
 }
 
 void BTCUGUI::showHide(bool show){

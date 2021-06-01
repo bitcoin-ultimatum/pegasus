@@ -69,7 +69,7 @@ bool PWidget::ask(const QString& title, const QString& message){
     return ret;
 }
 
-void PWidget::showDialog(QDialog *dlg, int xDiv, int yDiv){
+void PWidget::showDialog(QDialog *dlg, double xDiv, double yDiv){
     Q_EMIT execDialog(dlg, xDiv, yDiv);
 }
 

@@ -81,7 +81,7 @@ void openDialogFullScreen(QWidget *parent, QWidget * dialog){
     dialog->resize(parent->width(),parent->height());
 }
 
-bool openDialogWithOpaqueBackgroundY(QDialog *widget, BTCUGUI *gui, double posX, int posY){
+bool openDialogWithOpaqueBackgroundY(QDialog *widget, BTCUGUI *gui, double posX, double posY){
     widget->setWindowFlags(Qt::CustomizeWindowHint);
     widget->setAttribute(Qt::WA_TranslucentBackground, true);
     QPropertyAnimation* animation = new QPropertyAnimation(widget, "pos");
