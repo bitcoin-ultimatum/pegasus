@@ -4528,7 +4528,7 @@ HH        TREE WIDGET
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 #treeWidget {
-    border:1px solid #262642;
+    border:1px solid #FFFFFF;
     background-color:#222241;
     background-position:center;
     background-repeat:no-repeat;
@@ -4657,12 +4657,12 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 }
 
 QHeaderView::section {
-    background-color: #222241;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #262642;
     padding-top: 6px;
     padding-bottom: 6px;
     font-size:14px;
-    border:0px solid #262642;
+    border:0px solid #FFFFFF;
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
