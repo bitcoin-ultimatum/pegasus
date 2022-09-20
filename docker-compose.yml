@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+
+  orion-btcu:
+    container_name: orion-node
+    image: dim4egster/btculinuxtest:latest
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - {pwd}:/root/.btcu
+     
+    ports:
+      - 172.17.0.1:3666:3666
+      - 172.17.0.1:5666:5666
