@@ -22,21 +22,23 @@ variables:
 
 
 
-----BUILD------
-.docker build and push:
-  stage: build+push docker
+######BUILD######
+
+docker build:
+  stage: build
   script:
     - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
     - docker build --pull --rm -t $DOCKER_IMAGE_TAG ./${SERVICE_NAME}
     - docker push $DOCKER_IMAGE_TAG
     - docker rmi $DOCKER_IMAGE_TAG
-   when:
+  when:
     - manual
-   tags:
-    -  
+  tags:
+    - orion-build
+    - shell
 
   
------DEPLOY------
+######DEPLOY#####
 
 orion-node-one-deploy:
   stage: deploy
