@@ -2,8 +2,8 @@
 
 echo  ""
 echo  "[63%] Downloading latest version of the BTCU... "
-git clone https://github.com/bitcoin-ultimatum/orion --recursive
-cd orion
+#git clone https://github.com/bitcoin-ultimatum/orion --recursive
+#cd orion
 
 echo  ""
 echo  "[65%] Installing Berkeley DB... "
