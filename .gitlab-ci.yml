@@ -59,39 +59,39 @@ orion-node-one-deploy:
    - node-one
    
    
-orion-node-two-deploy:
-  stage: deploy
-  script:
-   - docker-compose ps
-   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-   - docker-compose pull btcu
-   - docker-compose stop -t 30 btcu
+#orion-node-two-deploy:
+#  stage: deploy
+#  script:
+#   - docker-compose ps
+#   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+#   - docker-compose pull btcu
+#   - docker-compose stop -t 30 btcu
    #- docker-compose kill btcu
-   - docker-compose up -d btcu
-   - docker ps
-  when:
-   - manual
+#   - docker-compose up -d btcu
+#   - docker ps
+#  when:
+#   - manual
    
-  tags:
-   - orion
-   - shell
-   - node-two
+# tags:
+#   - orion
+#   - shell
+#   - node-two
    
    
-orion-node-tree-deploy:
-  stage: deploy
-  script:
-   - docker-compose ps
-   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-   - docker-compose pull btcu
-   - docker-compose stop -t 30 btcu
+#orion-node-tree-deploy:
+#  stage: deploy
+#  script:
+#   - docker-compose ps
+#   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+#   - docker-compose pull btcu
+#   - docker-compose stop -t 30 btcu
    #- docker-compose kill btcu
-   - docker-compose up -d btcu
-   - docker ps
-  when:
-   - manual
+#   - docker-compose up -d btcu
+#   - docker ps
+#  when:
+#   - manual
    
-  tags:
-   - orion
-   - shell
-   - node-three  
+#  tags:
+#   - orion
+#   - shell
+#   - node-three  
