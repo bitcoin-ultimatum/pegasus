@@ -14,7 +14,7 @@ orion-node-one-build:
    when: manual
    script:
       - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-      - docker compose build --pull
+      - docker compose build --pull $SERVICE_NAME
       - docker compose push $SERVICE_NAME
       - docker push $CI_REGISTRY_IMAGE/orion-node-$CI_COMMIT_BRANCH
    tags:
