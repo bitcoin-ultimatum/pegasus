@@ -12,7 +12,7 @@ orion-node-one-deploy:
   script:
    - docker  ps
    - docker compose stop -t 30 orion-node
-   - docker-compose up -d 
+   - docker compose up -d 
    - docker ps
    
   tags:
