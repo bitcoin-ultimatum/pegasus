@@ -1,8 +1,8 @@
 version: "3"
 
-services:
+services: 
 
-  orion-btcu:
+  orion-node:
     container_name: orion-node
     image: "${CI_REGISTRY_IMAGE}/orion-node-${CI_COMMIT_BRANCH}"
     restart: unless-stopped
