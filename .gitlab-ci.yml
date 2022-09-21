@@ -1,40 +1,8 @@
 before_script:
   - echo `pwd`
-  - echo "CI_COMMIT_BRANCH = $CI_COMMIT_BRANCH"
-  - echo "CI_PROJECT_NAME = $CI_PROJECT_NAME"
-  - echo "CI_REGISTRY_IMAGE = $CI_REGISTRY_IMAGE"
-  - echo "PROJECT_NAME = $PROJECT_NAME"
-  - echo "PROJECT_STAGE = $PROJECT_STAGE"
-  - echo "PROJECT_TAG = $PROJECT_TAG"
-  - echo "DOCKER_IMAGE_TAG = $DOCKER_IMAGE_TAG"
-
 
 stages:
-  - build
   - deploy
-
-variables:
-  PROJECT_SERVICE: orion
-  PROJECT_TAG: orion
-  PROJECT_NAME: orion
-  DOCKER_IMAGE_TAG: $CI_REGISTRY_IMAGE/$PROJECT_SERVICE-$PROJECT_TAG-$CI_COMMIT_BRANCH
-  SERVICE_NAME: $PROJECT_NAME
-
-
-######BUILD######
-
-docker build:
-  stage: build
-  when: manual
-  script:
-    - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-    - docker build --pull --rm -t $DOCKER_IMAGE_TAG ./${SERVICE_NAME}
-    - docker push $DOCKER_IMAGE_TAG
-    - docker rmi $DOCKER_IMAGE_TAG
-  tags:
-    - orion-build
-    - shell
-
   
 ######DEPLOY#####
 
@@ -43,11 +11,8 @@ orion-node-one-deploy:
   when: manual 
   script:
    - docker-compose ps
-   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-   - docker-compose pull btcu
-   - docker-compose stop -t 30 btcu
-   #- docker-compose kill btcu
-   - docker-compose up -d btcu
+   - docker-compose stop -t 30 orion-node
+   - docker-compose up -d 
    - docker ps
    
   tags:
