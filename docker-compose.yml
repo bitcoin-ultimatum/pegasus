@@ -10,7 +10,7 @@ services:
       dockerfile: Dockerfile
     tty: true
     volumes:
-      - $(pwd):/root/.btcu
+      - ./:/root/.btcu
       - /home/gitlab-runner/chainstate:/root/.btcu/chainstate
      
     ports:
