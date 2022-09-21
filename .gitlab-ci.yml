@@ -10,8 +10,8 @@ orion-node-one-deploy:
   stage: deploy
   when: manual 
   script:
-   - docker-compose ps
-   - docker-compose stop -t 30 orion-node
+   - docker  ps
+   - docker compose stop -t 30 orion-node
    - docker-compose up -d 
    - docker ps
    
