@@ -4,7 +4,7 @@ services:
 
   orion-btcu:
     container_name: orion-node
-    image: dim4egster/btculinuxtest:latest
+    image: "${CI_REGISTRY_IMAGE}/orion-node-${CI_COMMIT_BRANCH}"
     restart: unless-stopped
     build:
       dockerfile: Dockerfile
