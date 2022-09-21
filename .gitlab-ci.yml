@@ -6,7 +6,7 @@ stages:
   - deploy
   
 variables:
-   SERVICE_NAME: orin-node
+   SERVICE_NAME: orion-node
 
 ######BUILD#######
 orion-node-one-build:
