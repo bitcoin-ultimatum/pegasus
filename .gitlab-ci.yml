@@ -2,8 +2,26 @@ before_script:
   - echo `pwd`
 
 stages:
+  - build 
   - deploy
   
+variables:
+   SERVICE_NAME: orin-node
+
+######BUILD#######
+orion-node-one-build:
+   stage: build
+   when: manual
+   script:
+      - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+      - docker compose build --pull
+      - docker compose push $SERVICE_NAME
+      - docker push $CI_REGISTRY_IMAGE/orion-node-$CI_COMMIT_BRANCH
+   tags:
+      - shell
+      - orion-build
+
+
 
 ######DEPLOY#####
 
@@ -12,9 +30,9 @@ orion-node-one-deploy:
   when: manual 
   script:
    - docker  ps
+   - docker compose pull orion-node
    - docker compose stop -t 30 orion-node
-   - docker compose up -d
-#   - docker exec  orion-node bash -x . /root/build_node_docker.sh
+   - docker compose up -d orion-node
    - docker ps
    
   tags:
