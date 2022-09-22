@@ -11,7 +11,7 @@ services:
     tty: true
     volumes:
       - /home/gitlab-runner/staff:/root/.btcu
-      - /home/gitlab-runner/chainstate:/root/.btcu/chainstate
+      - /home/gitlab-runner/chainstate/:/root/.btcu/chainstate
      
     ports:
       - 172.17.0.1:3666:3666
