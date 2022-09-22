@@ -32,7 +32,7 @@ orion-node-one-deploy:
    - docker  ps
    - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
    - docker compose pull orion-node
- #  - docker compose stop -t 30 orion-node
+   - docker compose stop -t 30 orion-node
    - docker compose up -d 
    - docker ps
    
