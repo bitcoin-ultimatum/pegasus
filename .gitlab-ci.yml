@@ -8,7 +8,7 @@ stages:
 variables:
    SERVICE_NAME: orion-node
 
-######BUILD#######
+######BUILD-ANTNODES-16#######
 orion-node-one-build:
    stage: build
    when: manual
@@ -23,7 +23,7 @@ orion-node-one-build:
 
 
 
-######DEPLOY#####
+######DEPLOY-ANTNODES-16#####
 
 orion-node-one-deploy:
   stage: deploy
@@ -42,39 +42,75 @@ orion-node-one-deploy:
    - node-one
    
    
-#orion-node-two-deploy:
-#  stage: deploy
-#  script:
-#   - docker-compose ps
-#   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-#   - docker-compose pull btcu
-#   - docker-compose stop -t 30 btcu
-   #- docker-compose kill btcu
-#   - docker-compose up -d btcu
-#   - docker ps
-#  when:
-#   - manual
+
+######BUILD-ANTNODES-15#######
+orion-node-two-build:
+   stage: build
+   when: manual
+   script:
+      - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+      - docker compose build --pull $SERVICE_NAME
+      - docker compose push $SERVICE_NAME
+      - docker push $CI_REGISTRY_IMAGE/orion-node-$CI_COMMIT_BRANCH
+   tags:
+      - shell
+      - orion-build
+      - node-two
+
+
+
+######DEPLOY-ANTNODES-15#####
+
+orion-node-two-deploy:
+  stage: deploy
+  when: manual 
+  script:
+   - docker  ps
+   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+   - docker compose pull orion-node
+ #  - docker compose stop -t 30 orion-node
+   - docker compose up -d 
+   - docker ps
    
-# tags:
-#   - orion
-#   - shell
-#   - node-two
+  tags:
+   - orion-deploy
+   - shell
+   - node-two
+   
+
+
+   ######BUILD-ANTNODES-17#######
+orion-node-three-build:
+   stage: build
+   when: manual
+   script:
+      - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+      - docker compose build --pull $SERVICE_NAME
+      - docker compose push $SERVICE_NAME
+      - docker push $CI_REGISTRY_IMAGE/orion-node-$CI_COMMIT_BRANCH
+   tags:
+      - shell
+      - orion-build
+      - node-three
+
+
+
+######DEPLOY-ANTNODES-17#####
+
+orion-node-three-deploy:
+  stage: deploy
+  when: manual 
+  script:
+   - docker  ps
+   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
+   - docker compose pull orion-node
+ #  - docker compose stop -t 30 orion-node
+   - docker compose up -d 
+   - docker ps
+   
+  tags:
+   - orion-deploy
+   - shell
+   - node-three
    
    
-#orion-node-tree-deploy:
-#  stage: deploy
-#  script:
-#   - docker-compose ps
-#   - echo "$CI_BUILD_TOKEN" | docker login -u "gitlab-ci-token" --password-stdin $CI_REGISTRY
-#   - docker-compose pull btcu
-#   - docker-compose stop -t 30 btcu
-   #- docker-compose kill btcu
-#   - docker-compose up -d btcu
-#   - docker ps
-#  when:
-#   - manual
-   
-#  tags:
-#   - orion
-#   - shell
-#   - node-three  
