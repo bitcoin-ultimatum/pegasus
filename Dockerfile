@@ -14,7 +14,7 @@ RUN bash -c "/build_node_docker.sh"
 #RUN wget https://btcu.io/releases/chainstate_orion.zip
 #RUN mkdir /root/.btcu
 #RUN unzip -d /root/.btcu chainstate_orion.zip
-ENTRYPOINT ["./orion/bin/btcud", "-wallet=/root/wallet.dat"]
+ENTRYPOINT ["./orion/bin/btcud"]
 
 # Expose Port for the Application
 EXPOSE 3666 5666
