@@ -14,5 +14,5 @@ services:
       - "/home/gitlab-runner/chainstate/:/root/.btcu/chainstate:rw"
      
     ports:
-      - 0.0.0.0.1:3666:3666
+      - 0.0.0.0:3666:3666
       - 0.0.0.0:5666:5666
