@@ -22,7 +22,7 @@ class BTCU_RPCValidatorsTest(BtcuTestFramework):
 
     def run_test(self):
         sporkName = "SPORK_1017_LEASING_ENFORCEMENT"
-        self.master_port = 23667 # regtest port
+        self.master_port = 23668 # regtest port
         self.master_alias = "test_mnv"
         self.master_id = 0
         self.miner_id = 1

@@ -2022,7 +2022,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+7"/>
-        <source>Address: 88.26.164.88:13667</source>
+        <source>Address: 88.26.164.88:13668</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8018,8 +8018,8 @@ BTCU Core Wallet</source>
     </message>
     <message>
         <location line="+3"/>
-        <source>(3667 could be used only on mainnet)</source>
-        <translation type="unfinished">(3667 could be used only on mainnet)</translation>
+        <source>(3668 could be used only on mainnet)</source>
+        <translation type="unfinished">(3668 could be used only on mainnet)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8033,7 +8033,7 @@ BTCU Core Wallet</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>(must be 3667 for mainnet)</source>
+        <source>(must be 3668 for mainnet)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

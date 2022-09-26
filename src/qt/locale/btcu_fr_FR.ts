@@ -1503,8 +1503,8 @@ Il commencera automatiquement dès que le portefeuille aura assez de confirmatio
         <translation>utilisateur de masternode</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13667</source>
-        <translation>Adresse: 88.26.164.88:13667</translation>
+        <source>Address: 88.26.164.88:13668</source>
+        <translation>Adresse: 88.26.164.88:13668</translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6258,8 +6258,8 @@ Portefeuille BTCU Core</translation>
         <translation>Vous devez spécifier une masternodeprivkey dans la configuration. Veuillez consulter la documentation pour obtenir de l'aide.</translation>
     </message>
     <message>
-        <source>(3667 could be used only on mainnet)</source>
-        <translation>(3667 ne peut être utilisé que pour le mainnet)</translation>
+        <source>(3668 could be used only on mainnet)</source>
+        <translation>(3668 ne peut être utilisé que pour le mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6270,8 +6270,8 @@ Portefeuille BTCU Core</translation>
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 3667 for mainnet)</source>
-        <translation>(doit être 3667 pour le mainnet)</translation>
+        <source>(must be 3668 for mainnet)</source>
+        <translation>(doit être 3668 pour le mainnet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

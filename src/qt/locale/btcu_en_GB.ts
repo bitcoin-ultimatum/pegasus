@@ -3247,8 +3247,8 @@ Please check the address and try again.</translation>
         <translation>You must specify a masternodeprivkey in the configuration. Please see documentation for help.</translation>
     </message>
     <message>
-        <source>(3667 could be used only on mainnet)</source>
-        <translation>(3667 could be used only on mainnet)</translation>
+        <source>(3668 could be used only on mainnet)</source>
+        <translation>(3668 could be used only on mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -3259,8 +3259,8 @@ Please check the address and try again.</translation>
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 3667 for mainnet)</source>
-        <translation>(must be 3667 for mainnet)</translation>
+        <source>(must be 3668 for mainnet)</source>
+        <translation>(must be 3668 for mainnet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

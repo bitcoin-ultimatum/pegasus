@@ -1621,8 +1621,8 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>user_masternode</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13667</source>
-        <translation>Adres: 88.26.164.88:13667</translation>
+        <source>Address: 88.26.164.88:13668</source>
+        <translation>Adres: 88.26.164.88:13668</translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6493,8 +6493,8 @@ BTCU Core Portemonnee</translation>
         <translation>Je moet een masternodeprivkey opgeven in de configuratie. Raadpleeg de documentatie voor hulp.</translation>
     </message>
     <message>
-        <source>(3667 could be used only on mainnet)</source>
-        <translation>(3667 kan alleen op mainnet worden gebruikt)</translation>
+        <source>(3668 could be used only on mainnet)</source>
+        <translation>(3668 kan alleen op mainnet worden gebruikt)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6505,8 +6505,8 @@ BTCU Core Portemonnee</translation>
         <translation>(standaard: 1)</translation>
     </message>
     <message>
-        <source>(must be 3667 for mainnet)</source>
-        <translation>(moet 3667 voor mainnet zijn)</translation>
+        <source>(must be 3668 for mainnet)</source>
+        <translation>(moet 3668 voor mainnet zijn)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

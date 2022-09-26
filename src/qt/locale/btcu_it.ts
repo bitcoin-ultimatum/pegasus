@@ -1622,8 +1622,8 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>user_masternode</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13667</source>
-        <translation>Address: 88.26.164.88:13667</translation>
+        <source>Address: 88.26.164.88:13668</source>
+        <translation>Address: 88.26.164.88:13668</translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6495,8 +6495,8 @@ Portafoglio BTCU Core.</translation>
         <translation>È necessario specificare una chiave masternodepriv nella configurazione. Consultare la documentazione per assistenza.</translation>
     </message>
     <message>
-        <source>(3667 could be used only on mainnet)</source>
-        <translation>(3667 potrebbe essere utilizzato solo su mainnet)</translation>
+        <source>(3668 could be used only on mainnet)</source>
+        <translation>(3668 potrebbe essere utilizzato solo su mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6507,8 +6507,8 @@ Portafoglio BTCU Core.</translation>
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 3667 for mainnet)</source>
-        <translation>(deve essere 3667 per mainnet)</translation>
+        <source>(must be 3668 for mainnet)</source>
+        <translation>(deve essere 3668 per mainnet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

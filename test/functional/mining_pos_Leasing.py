@@ -166,7 +166,7 @@ class BTCU_LeasingTest(BtcuTestFramework):
 
         self.master_alias = 'mnode'
         self.master_priv_key = '9247iC59poZmqBYt9iDh9wDam6v9S1rW5XekjLGyPnDhrDkP4AK'
-        self.master_port = 23667 # regtest port
+        self.master_port = 23668 # regtest port
 
         # miner1 - coin-owner
         # leaser - cold-staker and leaser
