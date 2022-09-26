@@ -3198,8 +3198,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Morate odrediti masternodeprivkey u konfiguraciji. Za pomoć pogledajte dokumentaciju.</translation>
     </message>
     <message>
-        <source>(3666 could be used only on mainnet)</source>
-        <translation>(3666 se može koristiti samo na mainnetu)</translation>
+        <source>(3667 could be used only on mainnet)</source>
+        <translation>(3667 se može koristiti samo na mainnetu)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -3210,8 +3210,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 3666 for mainnet)</source>
-        <translation>(mora biti 3666 za glavnu mrežu)</translation>
+        <source>(must be 3667 for mainnet)</source>
+        <translation>(mora biti 3667 za glavnu mrežu)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

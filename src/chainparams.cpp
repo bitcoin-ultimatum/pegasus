@@ -157,7 +157,7 @@ public:
         pchMessageStart[2] = 0xf3;//0xfd;
         pchMessageStart[3] = 0x11;//0xe9;
         vAlertPubKey = ParseHex("047e7293daa8765739db0bcd71ba5a74a6bbdd3440d1ca6b0fc49332292a21e0daeaad1184e7be80c641d159a5281a53e4c61f46619914743c582e51c42ea898d8");
-        nDefaultPort = 3666;
+        nDefaultPort = 3667;
         bnProofOfWorkLimit = ~uint256(0) >> 20; // BTCU starting difficulty is 1 / 2^12
         bnProofOfStakeLimit = ~uint256(0) >> 24;
         bnProofOfStakeLimit_V2 = ~uint256(0) >> 20; // 60/4 = 15 ==> use 2**4 higher limit
@@ -364,7 +364,7 @@ public:
         pchMessageStart[2] = 0x65;
         pchMessageStart[3] = 0xba;
         vAlertPubKey = ParseHex("0424f2affc27906832348adacf23f475a2a758c7d9ed4510d209a05f921653aaa1a6c3bb0683d91964cab3c12d868813e2f5835091f53a3c0a06e1afa057b9530a");
-        nDefaultPort = 13666;
+        nDefaultPort = 13667;
         nEnforceBlockUpgradeMajority = 4320; // 75%
         nRejectBlockOutdatedMajority = 5472; // 95%
         nToCheckBlockUpgradeMajority = 5760; // 4 days
@@ -493,7 +493,7 @@ public:
         pchMessageStart[1] = 0xcf;
         pchMessageStart[2] = 0x7e;
         pchMessageStart[3] = 0xac;
-        nDefaultPort = 23666;
+        nDefaultPort = 23667;
         nSubsidyHalvingInterval = 150;
         nEnforceBlockUpgradeMajority = 750;
         nRejectBlockOutdatedMajority = 950;

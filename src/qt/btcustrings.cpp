@@ -256,10 +256,10 @@ QT_TRANSLATE_NOOP("btcu-core", ""
 QT_TRANSLATE_NOOP("btcu-core", ""
 "You must specify a masternodeprivkey in the configuration. Please see "
 "documentation for help."),
-QT_TRANSLATE_NOOP("btcu-core", "(3666 could be used only on mainnet)"),
+QT_TRANSLATE_NOOP("btcu-core", "(3667 could be used only on mainnet)"),
 QT_TRANSLATE_NOOP("btcu-core", "(default: %s)"),
 QT_TRANSLATE_NOOP("btcu-core", "(default: 1)"),
-QT_TRANSLATE_NOOP("btcu-core", "(must be 3666 for mainnet)"),
+QT_TRANSLATE_NOOP("btcu-core", "(must be 3667 for mainnet)"),
 QT_TRANSLATE_NOOP("btcu-core", "<category> can be:"),
 QT_TRANSLATE_NOOP("btcu-core", "Accept command line and JSON-RPC commands"),
 QT_TRANSLATE_NOOP("btcu-core", "Accept connections from outside (default: 1 if no -proxy or -connect)"),

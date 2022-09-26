@@ -1620,8 +1620,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>user_masternode</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13666</source>
-        <translation>Адрес: 88.26.164.88:13666 </translation>
+        <source>Address: 88.26.164.88:13667</source>
+        <translation>Адрес: 88.26.164.88:13667 </translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6420,8 +6420,8 @@ BTCU Core Wallet</source>
         <translation>Вы должны указать в  строке приложенный ключ. Пожалуйста, обратитесь к документации для получения справки</translation>
     </message>
     <message>
-        <source>(3666 could be used only on mainnet)</source>
-        <translation>(3666 можно использовать только в сети)</translation>
+        <source>(3667 could be used only on mainnet)</source>
+        <translation>(3667 можно использовать только в сети)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6432,8 +6432,8 @@ BTCU Core Wallet</source>
         <translation>(неуплата: 1)</translation>
     </message>
     <message>
-        <source>(must be 3666 for mainnet)</source>
-        <translation>(должен быть 3666 для mainet)</translation>
+        <source>(must be 3667 for mainnet)</source>
+        <translation>(должен быть 3667 для mainet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>

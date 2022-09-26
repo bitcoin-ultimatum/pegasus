@@ -1623,8 +1623,8 @@ Cüzdanınız senkronize olduktan ve harcanmamış bakiyeniz yeterli miktarda on
         <translation>kullanıcı_masternode</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13666</source>
-        <translation>Adres: 88.26.164.88:13666</translation>
+        <source>Address: 88.26.164.88:13667</source>
+        <translation>Adres: 88.26.164.88:13667</translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6488,8 +6488,8 @@ Hoşgeldiniz</translation>
         <translation>Konfigürasyonda bir masternodeprivkey belirlemelisiniz.  Lütfen dokümantasyona bakınız.</translation>
     </message>
     <message>
-        <source>(3666 could be used only on mainnet)</source>
-        <translation>(3666 sadece mainnet üzerinde kullanılabilir)</translation>
+        <source>(3667 could be used only on mainnet)</source>
+        <translation>(3667 sadece mainnet üzerinde kullanılabilir)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6500,8 +6500,8 @@ Hoşgeldiniz</translation>
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 3666 for mainnet)</source>
-        <translation>(mainnet için 3666 olmalıdır)</translation>
+        <source>(must be 3667 for mainnet)</source>
+        <translation>(mainnet için 3667 olmalıdır)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
