@@ -1224,6 +1224,9 @@ CAmount CWalletTx::GetUnspentCredit(const isminefilter& filter) const
     if (filter & ISMINE_LEASED) {
         credit += pwallet->GetCredit(*this, ISMINE_LEASED, true);
     }
+    if (filter & ISMINE_LEASED_LOCKED_CLTV) {
+       credit += pwallet->GetCredit(*this, ISMINE_LEASED_LOCKED_CLTV, true);
+    }
     return credit;
 }
 
@@ -1321,6 +1324,11 @@ CAmount CWalletTx::GetLeasingCredit(bool fUseCache) const
 CAmount CWalletTx::GetLeasedCredit(bool fUseCache) const
 {
     return GetUnspentCredit(ISMINE_LEASED);
+}
+
+CAmount CWalletTx::GetLeasedLockedCLTVCredit(bool fUseCache) const
+{
+   return GetUnspentCredit(ISMINE_LEASED_LOCKED_CLTV);
 }
 
 CAmount CWalletTx::UpdateAmount(CAmount& amountToUpdate, bool& cacheFlagToUpdate, bool fUseCache, isminetype mimeType, bool fCredit) const
@@ -1932,7 +1940,10 @@ CAmount CWallet::GetLeasedBalance() const
 {
     return loopTxsBalance([](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal) {
         if (pcoin.HasP2LOutputs() && pcoin.IsTrusted())
-            nTotal += pcoin.GetLeasedCredit();
+        {
+           nTotal += pcoin.GetLeasedCredit();
+           nTotal += pcoin.GetLeasedLockedCLTVCredit();
+        }
     });
 }
 
@@ -2224,18 +2235,18 @@ bool CWallet::AvailableCoins(
                 }
                 if (!found) continue;
 
-                if (nCoinType == STAKEABLE_COINS) {
-                    if (pcoin->vout[i].IsZerocoinMint()) continue;
+                std::vector<valtype> vSolutions;
+                txnouttype whichType;
+                CScript scriptPubKeyKernel = pcoin->vout[i].scriptPubKey;
 
-                    std::vector<valtype> vSolutions;
-                    txnouttype whichType;
-                    CScript scriptPubKeyKernel = pcoin->vout[i].scriptPubKey;
+                if (!Solver(scriptPubKeyKernel, whichType, vSolutions)) continue;
 
-                    if (!Solver(scriptPubKeyKernel, whichType, vSolutions)) continue;
-                    if (whichType != TX_PUBKEY && whichType != TX_PUBKEYHASH && whichType != TX_COLDSTAKE) continue;
+                if (nCoinType == STAKEABLE_COINS)
+                    if (pcoin->vout[i].IsZerocoinMint() || (whichType != TX_PUBKEY && whichType != TX_PUBKEYHASH && whichType != TX_COLDSTAKE)) continue;
 
-                    //check if leasing locktime has not yet come
-                    if (whichType == TX_LEASE_CLTV && CScriptNum::vch_to_uint64(vSolutions[0]) < chainActive.Tip()->GetBlockTime()) continue;
+                //check if leasing locktime has not yet come (if leasing locktime more then last blocktime then continue)
+                if (whichType == TX_LEASE_CLTV){
+                   if (CScriptNum::vch_to_uint64(vSolutions[0]) > chainActive.Tip()->GetBlockTime()) continue;
                 }
 
                 if (IsSpent(wtxid, i)) continue;
@@ -2825,31 +2836,14 @@ bool CWallet::CreateTransaction(const std::vector<std::pair<CScript,
                for (const PAIRTYPE(const CWalletTx*, unsigned int)& coin : setCoins)
                   txNew.vin.push_back(CTxIn(coin.first->GetHash(), coin.second));
 
-               if (sign)
-               {
-                  // Signing transaction outputs
-                  int nOut = 0;
-                  for (const auto& output : txNew.vout)
-                  {
-                     if (output.scriptPubKey.HasOpSender())
-                     {
-                        const CScript& scriptPubKey = GetScriptForDestination(signSenderAddress);
-                        SignatureData sigdata;
-                        const CAmount& amount = output.nValue;
 
-                        if (!ProduceSignature(*this, MutableTransactionSignatureCreator(&txNew, nOut, amount, SIGHASH_ALL), scriptPubKey,sigdata))
-                        {
-                           strFailReason = _("Signing transaction failed");
-                           return false;
-                        }
-                        else
-                        {
-                           UpdateInput(txNew.vin[nOut], sigdata);
-                        }
-                        nOut++;
-                     }
-                  }
+               // Signing transaction outputs
+               std::map<int, std::string> output_errors;
+               if(sign && txNew.HasOpSender() && !SignTransactionOutput(txNew, *this, SIGHASH_ALL, output_errors)) {
+                  strFailReason = _("Signing transaction output failed");
+                  return false;
                }
+
                // Sign
                int nIn = 0;
                for (const PAIRTYPE(const CWalletTx*, unsigned int)& coin : setCoins)

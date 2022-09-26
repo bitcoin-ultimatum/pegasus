@@ -598,7 +598,7 @@ else
     echo -ne  "no"
     echo  ""
     echo  "[63%] Downloading latest version of the BTCU... "
-    git clone https://github.com/askiiRobotics/pegasus
+    git clone https://github.com/bitcoin-ultimatum/pegasus --recursive
     cd pegasus
     git checkout -b static-build-option-static-build origin/static-build-option-static-build
     echo  ""
@@ -644,7 +644,7 @@ echo  "[71%] Running CMake configuring... Done!"
 echo  ""
 echo  "[72%] Building BTCU... "
 
-make
+make btcud btcu-cli
 
 echo  ""
 echo  "[90%] Building BTCU... Done!"

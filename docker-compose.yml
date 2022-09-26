@@ -1,0 +1,18 @@
+version: "3"
+
+services: 
+
+  orion-node:
+    container_name: orion-node
+    image: "${CI_REGISTRY_IMAGE}/orion-node-${CI_COMMIT_BRANCH}"
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - "/home/gitlab-runner/staff:/root/.btcu:rw"
+      - "/home/gitlab-runner/chainstate/:/root/.btcu/chainstate:rw"
+     
+    ports:
+      - 0.0.0.0:3667:3667
+      - 0.0.0.0:5667:5667

@@ -15,6 +15,7 @@
 #include <boost/variant.hpp>
 
 #include <stdint.h>
+#include <variant>
 
 //contract executions with less gas than this are not standard
 //Make sure is always equal or greater than MINIMUM_GAS_LIMIT (which we can't reference here due to insane header dependency chains)
@@ -177,7 +178,6 @@ struct WitnessUnknown
  *  * CNoDestination: no destination set
  *  * CKeyID: TX_PUBKEYHASH destination
  *  * CScriptID: TX_SCRIPTHASH destination
- *  A CTxDestination is the internal data type encoded in a CBTCUAddress
  */
 using CTxDestination = std::variant<CNoDestination, PKHash, ScriptHash, WitnessV0ScriptHash, WitnessV0KeyHash, WitnessV1Taproot, WitnessUnknown>;
 
@@ -193,7 +193,7 @@ enum addresstype
 ///////////////////////////////////////////qtum
 /** Parse a output public key for the sender public key and sender signature. */
 bool ExtractSenderData(const CScript& outputPubKey, CScript* senderPubKey, CScript* senderSig);
-
+bool GetSenderPubKey(const CScript& outputPubKey, CScript& senderPubKey);
 
 const char* GetTxnOutputType(txnouttype t);
 

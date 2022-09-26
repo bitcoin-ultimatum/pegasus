@@ -1622,8 +1622,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>用户_主节点</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13666</source>
-        <translation>地址: 88.26.164.88:13666</translation>
+        <source>Address: 88.26.164.88:13667</source>
+        <translation>地址: 88.26.164.88:13667</translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6450,7 +6450,7 @@ BTCU核心钱包</translation>
         <translation>您必须在配置中指定一个主节点privkey。有关帮助，请参阅文档。</translation>
     </message>
     <message>
-        <source>(3666 could be used only on mainnet)</source>
+        <source>(3667 could be used only on mainnet)</source>
         <translation>(51472只可在网上使用)</translation>
     </message>
     <message>
@@ -6462,7 +6462,7 @@ BTCU核心钱包</translation>
         <translation>(默认: 1)</translation>
     </message>
     <message>
-        <source>(must be 3666 for mainnet)</source>
+        <source>(must be 3667 for mainnet)</source>
         <translation>(主网必须为51472)</translation>
     </message>
     <message>

@@ -46,11 +46,11 @@ config file): *Needed for Tor version 0.2.7.0 and older versions of Tor only. Fo
 versions of Tor see [Section 3](#3-automatically-listen-on-tor).*
 
 	HiddenServiceDir /var/lib/tor/btcu-service/
-	HiddenServicePort 3666 127.0.0.1:3666
+	HiddenServicePort 3667 127.0.0.1:3667
 	HiddenServicePort 61472 127.0.0.1:61472
 
 The directory can be different of course, but (both) port numbers should be equal to
-your btcud's P2P listen port (3666 by default).
+your btcud's P2P listen port (3667 by default).
 
 	-externalip=X   You can tell btcu about its publicly reachable address using
 	                this option, and this can be a .onion address. Given the above
@@ -85,7 +85,7 @@ as well, use `discover` instead:
 
 	./btcud ... -discover
 
-and open port 3666 on your firewall (or use -upnp).
+and open port 3667 on your firewall (or use -upnp).
 
 If you only want to use Tor to reach .onion addresses, but not use it as a proxy
 for normal IPv4/IPv6 communication, use:

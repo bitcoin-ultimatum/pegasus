@@ -30,7 +30,13 @@ sed -i '' 's/'"${1}"'/'"${2}"'/' contrib/gitian-descriptors/gitian-linux.yml
 sed -i '' 's/'"${1}"'/'"${2}"'/' contrib/debian/control
 sed -i '' 's/'"${1}"'/'"${2}"'/' build-aux/snap/snapcraft.yaml
 
+cp tmpmerge/chainparamsbase.cpp src/chainparamsbase.cpp
 cp tmpmerge/chainparams.cpp src/chainparams.cpp
 cp tmpmerge/chainparams.h src/chainparams.h
 cp tmpmerge/blockrewards.h src/blockrewards.h
+cp tmpmerge/masternodeconfig.cpp src/masternodeconfig.cpp
+cp tmpmerge/masternode.cpp src/masternode.cpp
+cp tmpmerge/netbase_tests.cpp src/netbase_tests.cpp
+cp tmpmerge/masternodeman.cpp src/masternodeman.cpp
+cp tmpmerge/Dockerfile Dockerfile
 rm -rf tmpmerge

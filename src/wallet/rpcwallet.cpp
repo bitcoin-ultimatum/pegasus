@@ -137,7 +137,7 @@ bool SetDefaultPayForContractAddress(CWallet* const pwallet, CCoinControl & coin
     coinControl.fAllowOtherInputs=true;
 
     assert(pwallet != NULL);
-    pwallet->AvailableCoins(&vecOutputs, false, NULL, true);
+    pwallet->AvailableCoins(&vecOutputs, false, &coinControl, true);
 
     for (const COutput& out : vecOutputs) {
         CTxDestination destAdress;
@@ -549,7 +549,7 @@ UniValue sendtocontract(const UniValue& params, bool fHelp){
     if (params.size() > 5){
         senderAddress = DecodeDestination(params[5].get_str());
         if (!IsValidDestination(senderAddress))
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Qtum address to send from");
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid BTCU address to send from");
         if (!IsValidContractSenderAddress(senderAddress))
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid contract sender address. Only P2PK and P2PKH allowed");
         else
@@ -657,7 +657,7 @@ UniValue sendtocontract(const UniValue& params, bool fHelp){
 
     CWalletTx wtx;
     CReserveKey reservekey(pwalletMain);
-    if (!pwalletMain->CreateTransaction(scriptPubKey, nAmount, wtx, reservekey, nFeeRequired, strError, &coinControl, ALL_COINS, false, nGasFee, false, true)) {
+    if (!pwalletMain->CreateTransaction(scriptPubKey, nAmount, wtx, reservekey, nFeeRequired, strError, &coinControl, ALL_COINS, false, nGasFee, false, true, true, signSenderAddress)) {
         if (nFeeRequired > pwalletMain->GetBalance())
             strError = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
@@ -1702,7 +1702,7 @@ UniValue CreateLeasingTransaction(const UniValue& params, CWalletTx& wtxNew, CRe
     // Get Leasing Address
     bool isLeaserStaking = false;
     CTxDestination leaserAddr = DecodeDestination(params[0].get_str(), &isLeaserStaking);
-    if (!IsValidDestination(leaserAddr) || !isLeaserStaking)
+    if (!IsValidDestination(leaserAddr) || isLeaserStaking)
        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid BTCU leasing address");
 
     CKeyID leaserKey = GetKeyForDestination(*pwalletMain, leaserAddr);
@@ -2930,13 +2930,13 @@ UniValue listleasingutxos(const UniValue& params, bool fHelp)
             continue;
 
         // if this tx has no unspent P2L outputs for us, skip it
-        if(pcoin->GetLeasingCredit() == 0 && pcoin->GetLeasedCredit() == 0)
+        if(pcoin->GetLeasingCredit() == 0 && pcoin->GetLeasedCredit() == 0 && pcoin->GetLeasedLockedCLTVCredit() == 0)
             continue;
 
         for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
             const CTxOut& out = pcoin->vout[i];
             isminetype mine = pwalletMain->IsMine(out);
-            if (!bool(mine & ISMINE_LEASING) && !bool(mine & ISMINE_LEASED))
+            if (!bool(mine & ISMINE_LEASING) && !bool(mine & ISMINE_LEASED) && !bool(mine & ISMINE_LEASED_LOCKED_CLTV))
                 continue;
             txnouttype type;
             std::vector<CTxDestination> addresses;
@@ -2951,8 +2951,10 @@ UniValue listleasingutxos(const UniValue& params, bool fHelp)
             entry.push_back(Pair("txidn", (int)i));
             entry.push_back(Pair("amount", ValueFromAmount(out.nValue)));
             entry.push_back(Pair("confirmations", pcoin->GetDepthInMainChain(false)));
-            entry.push_back(Pair("coin-leaser", EncodeDestination(addresses[0], CChainParams::PUBKEY_ADDRESS)));
-            entry.push_back(Pair("coin-owner", EncodeDestination(addresses[1])));
+            entry.push_back(Pair("coin_leaser", EncodeDestination(addresses[0], CChainParams::PUBKEY_ADDRESS)));
+            entry.push_back(Pair("coin_owner", EncodeDestination(addresses[1])));
+            if(mine & ISMINE_LEASED_LOCKED_CLTV)
+               entry.push_back(Pair("leased_until", out.scriptPubKey.ExtractLeasedCLTVTimestamp()));
             entry.push_back(Pair("whitelisted", fWhitelisted ? "true" : "false"));
             results.push_back(entry);
         }

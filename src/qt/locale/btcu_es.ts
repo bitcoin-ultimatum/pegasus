@@ -1620,8 +1620,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>usuario_masternode</translation>
     </message>
     <message>
-        <source>Address: 88.26.164.88:13666</source>
-        <translation>Dirección: 88.26.164.88:13666</translation>
+        <source>Address: 88.26.164.88:13667</source>
+        <translation>Dirección: 88.26.164.88:13667</translation>
     </message>
     <message>
         <source>Jan. 19, 2019</source>
@@ -6423,8 +6423,8 @@ BTCU Core Wallet</translation>
         <translation>Debes especificar un masternodeprivkey en la configuración. Por favor mira la documentación por ayuda.</translation>
     </message>
     <message>
-        <source>(3666 could be used only on mainnet)</source>
-        <translation>(3666 puede ser utilizado solo en mainnet)</translation>
+        <source>(3667 could be used only on mainnet)</source>
+        <translation>(3667 puede ser utilizado solo en mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6435,8 +6435,8 @@ BTCU Core Wallet</translation>
         <translation>(predeterminado: 1)</translation>
     </message>
     <message>
-        <source>(must be 3666 for mainnet)</source>
-        <translation>(debe ser 3666 para un mainnet)</translation>
+        <source>(must be 3667 for mainnet)</source>
+        <translation>(debe ser 3667 para un mainnet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
