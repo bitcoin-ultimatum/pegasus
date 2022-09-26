@@ -13,8 +13,8 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "util/convert.h"
-#include "cpp-ethereum/libdevcore/SHA3.h"
-#include "cpp-ethereum/libdevcore/RLP.h"
+#include <libdevcore/SHA3.h>
+#include <libdevcore/RLP.h>
 #include <assert.h>
 
 #include <boost/assign/list_of.hpp>
@@ -629,9 +629,19 @@ std::string CChainParams::EVMGenesisInfo(dev::eth::Network network) const
 {
     // replace_constants
     std::string genesisInfo = dev::eth::genesisInfo(network);
-    ReplaceInt(446320, "QIP7_STARTING_BLOCK", genesisInfo);
-    ReplaceInt(446320, "QIP6_STARTING_BLOCK", genesisInfo);
+    ReplaceInt(0, "QIP7_STARTING_BLOCK", genesisInfo);
+    ReplaceInt(0, "QIP6_STARTING_BLOCK", genesisInfo);
     return genesisInfo;
+}
+
+std::string CChainParams::EVMGenesisInfo() const
+{
+   dev::eth::EVMConsensus evmConsensus;
+   evmConsensus.QIP6Height = 0;
+   evmConsensus.QIP7Height = 0;
+   evmConsensus.nMuirGlacierHeight = 0;
+   evmConsensus.nLondonHeight = 0;
+   return dev::eth::genesisInfoQtum(dev::eth::Network::qtumNetwork, evmConsensus);
 }
 
 std::string toHexString(int64_t intValue) {
