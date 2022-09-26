@@ -17,4 +17,4 @@ RUN bash -c "/build_node_docker.sh"
 ENTRYPOINT ["./orion/bin/btcud"]
 
 # Expose Port for the Application
-EXPOSE 3666 5666
+EXPOSE 3667 5667
